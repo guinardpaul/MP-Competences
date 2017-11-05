@@ -5,6 +5,9 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+# Project folder
+/MP-CT
+
 # Database
 *.mwb
 *.bak

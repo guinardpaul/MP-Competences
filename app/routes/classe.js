@@ -1,0 +1,129 @@
+const mongoose = require('mongoose');
+const Classe = require('../models/classes');
+
+module.exports = (router) => {
+
+  router.get('/classes', (req, res, next) => {
+    Classe.find((err, classes) => {
+      if (err) return next(err);
+
+      if (!classes) {
+        return res.status(400).json({
+          success: false,
+          message: 'No Classes find'
+        });
+      }
+      return res.status(200).json({
+        success: true,
+        obj: classes
+      });
+    });
+  });
+
+  router.get('/classes/:id', (req, res, next) => {
+    if (!req.params.id) {
+      res.status(409).json({
+        success: false,
+        message: 'id not provided'
+      });
+    } else {
+      Classe.findById(req.params.id, (err, classe) => {
+        if (err) return next(err);
+
+        if (!classe) {
+          return res.status(400).json({
+            success: false,
+            message: 'Classe not find'
+          });
+        }
+
+        return res.status(200).json({
+          success: true,
+          obj: classe
+        });
+      });
+    }
+  });
+
+  router.post('/classes', (req, res, next) => {
+    if (!req.body.nom_classe) {
+      return res.status(409).json({
+        success: false,
+        message: 'nom classe not provided'
+      });
+    } else {
+      Classe.create(req.body, (err, classe) => {
+        if (err) {
+          if (err.code === 11000) {
+            return res.status(409).json({
+              success: false,
+              message: 'nom classe already exist'
+            });
+          } else {
+            return next(err);
+          }
+        }
+
+        return res.status(200).json({
+          success: true,
+          obj: classe
+        });
+      });
+    }
+  });
+
+  router.put('/classes/:id', (req, res, next) => {
+    if (!req.body) {
+      return res.status(409).json({
+        success: false,
+        message: 'body not provided'
+      });
+    } else if (!req.params.id) {
+      return res.status(409).json({
+        success: false,
+        message: 'id not provided'
+      });
+    } else {
+      Classe.findByIdAndUpdate(req.params.id, req.body, { new: true }, (err, classe) => {
+        if (err) return next(err);
+
+        if (!classe) {
+          return res.status(400).json({
+            success: false,
+            message: 'Classe not find'
+          });
+        }
+        return res.status(200).json({
+          success: true,
+          obj: classe
+        });
+      });
+    }
+  });
+
+  router.delete('/classes/:id', (req, res, next) => {
+    if (!req.params.id) {
+      return res.status(409).json({
+        success: false,
+        message: 'id not provided'
+      });
+    } else {
+      Classe.findByIdAndRemove(req.params.id, (err, classe) => {
+        if (err) return next(err);
+
+        if (!classe) {
+          return res.status(400).json({
+            success: false,
+            message: 'Classe not find'
+          });
+        }
+        return res.status(200).json({
+          success: true,
+          obj: classe
+        });
+      });
+    }
+  });
+
+  return router;
+}
