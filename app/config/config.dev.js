@@ -1,10 +1,8 @@
-const crypto = require('crypto').randomBytes(256).toString('hex');
 
 module.exports = {
   environment: 'development',
   uri: 'mongodb://localhost:27017/MP-Competences',
   options: { useMongoClient: true },
-  secret: crypto,
   db: 'MP-Competences',
   favicon_path: 'public/src',
   favicon: 'favicon.ico',

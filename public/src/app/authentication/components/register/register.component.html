@@ -1,0 +1,73 @@
+<h2 class="page-header">GP - Conception & Construction</h2>
+<span class="col-sm-3 col-md-3 col-lg-3 col-xs-2"></span>
+
+<mat-card class="col-sm-6 col-md-6 col-lg-6 col-xs-8" style="background-color: rgb(255, 246, 234);">
+    <form (submit)="onRegister()" [formGroup]="registerForm">
+        <mat-card-header>
+            <mat-card-title style="font-size: 40px;">Créer un compte</mat-card-title>
+            <mat-card-subtitle class="email-already-exists" *ngIf="verifEmailUnicite">Un compte avec cet adresse email existe déjà.
+                <a routerLink="/login" (click)="onLogin()">Se connecter ?</a>
+            </mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content class="register-container">
+            <!-- Common data -->
+            <table class="container-width">
+                <tr>
+                    <td>
+                        <mat-form-field class="input">
+                            <input matInput type="text" placeholder="Nom" formControlName="nom" autofocus required>
+                            <mat-error class="error" *ngIf="registerForm.controls.nom.errors">{{getErrorMessage('nom')}}</mat-error>
+                        </mat-form-field>
+                    </td>
+                    <td>
+                        <mat-form-field class="input">
+                            <input matInput type="text" placeholder="Prénom" formControlName="prenom" required>
+                            <mat-error class="error" *ngIf="registerForm.controls.prenom.errors">{{getErrorMessage('prenom')}}</mat-error>
+                        </mat-form-field>
+                    </td>
+                </tr>
+            </table>
+            <!-- /Common data -->
+
+            <mat-form-field class="input">
+                <input matInput type="email" placeholder="Email" formControlName="email" required>
+                <mat-error class="error" *ngIf="registerForm.controls.email.errors">{{getErrorMessage('email')}}</mat-error>
+            </mat-form-field>
+
+            <!-- Passwords formGroup -->
+            <table class="container-width" formGroupName="passwords">
+                <tr>
+                    <td>
+                        <mat-form-field class="input">
+                            <input matInput type="password" placeholder="Mot de passe" formControlName="password" required>
+                            <mat-error class="error" *ngIf="passwords.controls.password.errors">{{getErrorMessage('password')}}</mat-error>
+                        </mat-form-field>
+                    </td>
+                    <td>
+                        <mat-form-field class="input">
+                            <input matInput type="password" placeholder="Confirmation" formControlName="confirmPassword" required>
+                            <mat-error class="error" *ngIf="passwords.controls.confirmPassword.errors">{{getErrorMessage('confirmPassword')}}</mat-error>
+                        </mat-form-field>
+                    </td>
+                </tr>
+            </table>
+            <!-- /Passwords formGroup -->
+
+            <!-- Error Passwords Not Match -->
+            <span class="passwords-error" *ngIf="registerForm.controls.passwords.errors && passwords.controls.password.touched && !passwords.controls.confirmPassword.pristine">{{getErrorMessage('passwords')}}</span>
+
+        </mat-card-content>
+        <!-- Button -->
+        <mat-card-actions>
+            <span class="col-lg-2 col-md-2 col-sm-2 col-xs-0"></span>
+            <span class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+
+        <button mat-raised-button [disabled]="!registerForm.valid || processing || verifEmailUnicite" type="submit" color="primary">S'enregistrer</button>
+      </span>
+            <span class="col-lg-2 col-md-2 col-sm-2 col-xs-0"></span>
+        </mat-card-actions>
+        <!-- /Button -->
+    </form>
+</mat-card>
+
+<span class="col-sm-3 col-md-3 col-lg-3 col-xs-2"></span>

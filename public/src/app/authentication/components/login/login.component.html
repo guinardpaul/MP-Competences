@@ -1,0 +1,38 @@
+<div class="container">
+    <h2 class="page-header">GP - Conception & Construction</h2>
+    <span class="col-sm-4 col-md-4 col-lg-4 col-xs-2"></span>
+
+    <mat-card class="col-sm-4 col-md-4 col-lg-4 col-xs-8" style="background-color: rgb(255, 246, 234);">
+        <form (submit)="onLogin()" [formGroup]="loginForm">
+            <mat-card-header>
+                <mat-card-title style="font-size: 40px;">Se connecter</mat-card-title>
+            </mat-card-header>
+            <mat-card-content class="login-container">
+                <!-- Login data -->
+                <div>
+                    <mat-form-field class="input">
+                        <input matInput type="email" placeholder="Email" formControlName="email" required>
+                        <mat-error class="error" *ngIf="loginForm.controls.email.errors">{{getErrorMessage('email')}}</mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field class="input">
+                        <input matInput type="password" placeholder="Mot de passe" formControlName="password" required>
+                        <mat-error class="error" *ngIf="loginForm.controls.password.errors">{{getErrorMessage('password')}}</mat-error>
+                    </mat-form-field>
+                </div>
+                <!-- /Login data -->
+
+            </mat-card-content>
+            <!-- Button -->
+            <mat-card-actions>
+                <div style="text-align: center;">
+                    <button mat-raised-button [disabled]="!loginForm.valid || processing" type="submit" color="primary">Se connecter</button>
+                    <a routerLink="/forgot-password" class="forgot-password-link">Mot de passe oublié ?</a>
+                </div>
+            </mat-card-actions>
+            <!-- /Button -->
+        </form>
+    </mat-card>
+
+    <span class="col-sm-4 col-md-4 col-lg-4 col-xs-2"></span>
+</div>

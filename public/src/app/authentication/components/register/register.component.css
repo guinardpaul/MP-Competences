@@ -1,0 +1,36 @@
+.email-already-exists {
+    font-style: italic;
+}
+
+.register-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.register-container>* {
+    width: 100%;
+}
+
+.container-width {
+    width: 100%;
+}
+
+.input {
+    width: 98%;
+    margin-top: 5px;
+}
+
+.login-link {
+    font-size: 12px !important;
+    margin-left: 40px !important;
+}
+
+.passwords-error {
+    font-size: 85%;
+    color: #f44336;
+    display: block;
+}
+
+.error {
+    font-size: 110% !important;
+}
