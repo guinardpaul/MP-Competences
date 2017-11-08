@@ -10,22 +10,22 @@ module.exports = (router, passport) => {
    */
   router.post('/register', (req, res, next) => {
     if (!req.body.nom) {
-      res.status(409).json({
+      res.status(400).json({
         success: false,
         message: 'Nom not provided'
       });
     } else if (!req.body.prenom) {
-      res.status(409).json({
+      res.status(400).json({
         success: false,
         message: 'Prenom not provided'
       });
     } else if (!req.body.email) {
-      res.status(409).json({
+      res.status(400).json({
         success: false,
         message: 'Email not provided'
       });
     } else if (!req.body.password) {
-      res.status(409).json({
+      res.status(400).json({
         success: false,
         message: 'Password not provided'
       });
@@ -35,14 +35,14 @@ module.exports = (router, passport) => {
           return next(err); // will generate a 500 error
         }
         if (!user) {
-          return res.status(409).json(info);
+          return res.status(404).json(info);
         }
         req.login(user, function (err) {
           if (err) {
             console.log(err);
             return next(err);
           }
-          return res.status(200).json(info);
+          return res.status(201).json(info);
         });
       })(req, res, next);
     }
@@ -57,7 +57,7 @@ module.exports = (router, passport) => {
 
       // If Passport throws/catches an error
       if (err) {
-        res.status(404).json(err);
+        res.status(500).json(err);
         return;
       }
 

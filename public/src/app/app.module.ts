@@ -18,12 +18,18 @@ import { ValidationService } from './authentication/services/validation.service'
 // Guards
 import { AuthGuard } from './routing/guards/auth.guard';
 import { NotAuthGuard } from './routing/guards/not-auth.guard';
+import { GestionElevesComponent } from './gestion/gestion-eleves/gestion-eleves.component';
+import { GestionClassesComponent } from './gestion/gestion-classes/gestion-classes.component';
+import { GestionCompetencesComponent } from './gestion/gestion-competences/gestion-competences.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavbarComponent,
     PageNotFoundComponent,
+    GestionElevesComponent,
+    GestionClassesComponent,
+    GestionCompetencesComponent,
   ],
   imports: [
     BrowserModule,

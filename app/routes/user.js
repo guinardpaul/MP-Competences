@@ -6,7 +6,7 @@ module.exports = (router) => {
 
     router.get('/checkEmail/:email', (req, res, next) => {
         if (!req.params.email) {
-            return res.status(409).json({
+            return res.status(400).json({
                 success: false,
                 message: 'email not provided'
             });
@@ -17,7 +17,7 @@ module.exports = (router) => {
                     // Email non enregistré => valid
                     res.status(200).json({
                         success: true,
-                        message: 'user not find'
+                        message: 'Object user not find'
                     });
                 } else {
                     // EMail enregistré => invalid
@@ -32,7 +32,7 @@ module.exports = (router) => {
 
     router.get('/email/:email', (req, res, next) => {
         if (!req.params.email) {
-            return res.status(409).json({
+            return res.status(400).json({
                 success: false,
                 message: 'email not provided'
             });
@@ -40,9 +40,9 @@ module.exports = (router) => {
             User.findOne({ email: req.params.email }).select('nom prenom email').exec((err, user) => {
                 if (err) return next(err);
                 if (!user) {
-                    res.status(409).json({
+                    res.status(404).json({
                         success: false,
-                        message: 'user not find'
+                        message: 'Object user not find'
                     });
                 } else {
                     return res.status(200).json({
@@ -56,12 +56,12 @@ module.exports = (router) => {
 
     router.get('/id/:_id', (req, res, next) => {
         if (!req.params._id) {
-            return res.status(409).json({
+            return res.status(400).json({
                 success: false,
                 message: 'email not provided'
             });
         } else if (!req.params._id) {
-            res.status(409).json({
+            res.status(400).json({
                 success: false,
                 message: 'id not provided'
             });
@@ -69,9 +69,9 @@ module.exports = (router) => {
             User.findOne({ _id: req.params._id }).select('nom prenom email validAccount').exec((err, user) => {
                 if (err) return next(err);
                 if (!user) {
-                    res.status(409).json({
+                    res.status(404).json({
                         success: false,
-                        message: 'user not find'
+                        message: 'Object user not find'
                     });
                 } else {
                     return res.status(200).json({
@@ -85,12 +85,12 @@ module.exports = (router) => {
 
     router.put('/init-password/:_id', (req, res, next) => {
         if (!req.body.password) {
-            res.status(409).json({
+            res.status(400).json({
                 success: false,
                 message: 'password not provided'
             });
         } else if (!req.params._id) {
-            res.status(409).json({
+            res.status(400).json({
                 success: false,
                 message: 'id not provided'
             });
@@ -98,18 +98,17 @@ module.exports = (router) => {
             User.findById(req.params._id, (err, user) => {
                 if (err) return next(err);
                 if (!user) {
-                    res.status(409).json({
+                    res.status(404).json({
                         success: false,
-                        message: 'user not find'
+                        message: 'Object user not find'
                     });
                 } else {
-                    console.log(req.body.password);
                     User.update({ _id: req.params._id }, { password: req.body.password }, (err, raw) => {
                         if (err) return next(err);
                         if (!raw) {
-                            res.status(409).json({
+                            res.status(404).json({
                                 success: false,
-                                message: 'user not find'
+                                message: 'Object user not find'
                             });
                         } else {
                             res.status(200).json({
@@ -126,12 +125,12 @@ module.exports = (router) => {
 
     router.put('/validate-account/:_id', (req, res, next) => {
         if (!req.body) {
-            res.status(409).json({
+            res.status(400).json({
                 success: false,
                 message: 'body not provided'
             });
         } else if (!req.params._id) {
-            res.status(409).json({
+            res.status(400).json({
                 success: false,
                 message: 'id not provided'
             });
@@ -139,9 +138,9 @@ module.exports = (router) => {
             User.findByIdAndUpdate(req.params._id, { validAccount: req.body.validAccount }, { new: true }, (err, user) => {
                 if (err) return next(err);
                 if (!user) {
-                    res.status(409).json({
+                    res.status(404).json({
                         success: false,
-                        message: 'user not find'
+                        message: 'Object user not find'
                     });
                 } else if (!user.validAccount) {
                     res.status(409).json({
@@ -189,9 +188,9 @@ module.exports = (router) => {
                     message: err
                 });
             } else if (!user) {
-                res.status(400).json({
+                res.status(404).json({
                     success: false,
-                    message: 'User not find'
+                    message: 'Object User not find'
                 });
             } else {
                 res.status(200).json({

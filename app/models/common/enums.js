@@ -1,6 +1,4 @@
-/**
- * Enums Validators utils
- */
+// Enums Validators utils 
 
 /**
  * Enum Cycles
@@ -21,7 +19,7 @@ export const RESULTS = [
 ];
 
 /**
- * Enum value
+ * Enum Value
  */
 export const VALUE = [
     1,

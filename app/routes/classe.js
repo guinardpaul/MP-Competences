@@ -3,14 +3,17 @@ const Classe = require('../models/classes');
 
 module.exports = (router) => {
 
+  /**
+   * Get All Classes
+   */
   router.get('/classes', (req, res, next) => {
     Classe.find((err, classes) => {
       if (err) return next(err);
 
       if (!classes) {
-        return res.status(400).json({
+        return res.status(404).json({
           success: false,
-          message: 'No Classes find'
+          message: 'Object Classe not find'
         });
       }
       return res.status(200).json({
@@ -20,9 +23,12 @@ module.exports = (router) => {
     });
   });
 
+  /**
+   * Get One Classe by Id
+   */
   router.get('/classes/:id', (req, res, next) => {
     if (!req.params.id) {
-      res.status(409).json({
+      res.status(400).json({
         success: false,
         message: 'id not provided'
       });
@@ -31,9 +37,9 @@ module.exports = (router) => {
         if (err) return next(err);
 
         if (!classe) {
-          return res.status(400).json({
+          return res.status(404).json({
             success: false,
-            message: 'Classe not find'
+            message: 'Object Classe not find'
           });
         }
 
@@ -45,11 +51,19 @@ module.exports = (router) => {
     }
   });
 
+  /**
+   * Save Classe
+   */
   router.post('/classes', (req, res, next) => {
     if (!req.body.nom_classe) {
-      return res.status(409).json({
+      return res.status(400).json({
         success: false,
         message: 'nom classe not provided'
+      });
+    } else if (!req.body.cycle) {
+      return res.status(400).json({
+        success: false,
+        message: 'cycle not provided'
       });
     } else {
       Classe.create(req.body, (err, classe) => {
@@ -64,22 +78,26 @@ module.exports = (router) => {
           }
         }
 
-        return res.status(200).json({
+        return res.status(201).json({
           success: true,
+          message: 'Object Classe saved',
           obj: classe
         });
       });
     }
   });
 
+  /**
+   * Update Classe
+   */
   router.put('/classes/:id', (req, res, next) => {
     if (!req.body) {
-      return res.status(409).json({
+      return res.status(400).json({
         success: false,
         message: 'body not provided'
       });
     } else if (!req.params.id) {
-      return res.status(409).json({
+      return res.status(400).json({
         success: false,
         message: 'id not provided'
       });
@@ -88,22 +106,26 @@ module.exports = (router) => {
         if (err) return next(err);
 
         if (!classe) {
-          return res.status(400).json({
+          return res.status(404).json({
             success: false,
-            message: 'Classe not find'
+            message: 'Object Classe not find'
           });
         }
         return res.status(200).json({
           success: true,
+          message: 'Object Classe updated',
           obj: classe
         });
       });
     }
   });
 
+  /**
+   * Delete Classe
+   */
   router.delete('/classes/:id', (req, res, next) => {
     if (!req.params.id) {
-      return res.status(409).json({
+      return res.status(400).json({
         success: false,
         message: 'id not provided'
       });
@@ -112,14 +134,14 @@ module.exports = (router) => {
         if (err) return next(err);
 
         if (!classe) {
-          return res.status(400).json({
+          return res.status(404).json({
             success: false,
-            message: 'Classe not find'
+            message: 'Object Classe not find'
           });
         }
         return res.status(200).json({
           success: true,
-          obj: classe
+          message: 'Object Classe removed'
         });
       });
     }

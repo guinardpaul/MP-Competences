@@ -4,23 +4,25 @@ const Competence = require('../models/competences');
 module.exports = (router) => {
 
   /**
-   * Get All competences par eleve
+   * Get All competences par Cycle
    */
-  router.get('/competences/eleve/:eleve', (req, res, next) => {
-    if (!req.params.eleve) {
-      res.status(409).json({
+  router.get('/competences/cycle/:cycle', (req, res, next) => {
+    if (!req.params.cycle) {
+      res.status(400).json({
         success: false,
-        message: 'eleve id not provided'
+        message: 'cycle id not provided'
       });
     } else {
-      Competence.find({ eleve: req.params.eleve }, (err, ct) => {
+      Competence.find({ cycle: req.params.cycle }, (err, ct) => {
         if (err) return next(err);
-        /* if (!ct) {
-          res.status(400).json({
+
+        if (!ct) {
+          res.status(404).json({
             success: false,
-            message: 'Competences not find'
+            message: 'Object Competences not find'
           });
-        } */
+        }
+
         return res.status(200).json({
           success: true,
           obj: ct
@@ -30,28 +32,25 @@ module.exports = (router) => {
   });
 
   /**
-   * Get All competences par eleve et par ref CT
+   * Get One competence par ref CT
    */
   router.get('/competences/eleve/:eleve/ref/:ref_ct', (req, res, next) => {
-    if (!req.params.eleve) {
-      res.status(409).json({
-        success: false,
-        message: 'eleve id not provided'
-      });
-    } else if (!req.params.ref_ct) {
-      res.status(409).json({
+    if (!req.params.ref_ct) {
+      res.status(400).json({
         success: false,
         message: 'ref_ct not provided'
       });
     } else {
-      Competence.find({ eleve: req.params.eleve, ref_ct: req.params.ref_ct }, (err, ct) => {
+      Competence.find({ ref_ct: req.params.ref_ct }, (err, ct) => {
         if (err) return next(err);
+
         if (!ct) {
-          res.status(400).json({
+          res.status(404).json({
             success: false,
             message: 'Competences not find'
           });
         }
+
         return res.status(200).json({
           success: true,
           obj: ct
@@ -60,19 +59,95 @@ module.exports = (router) => {
     }
   });
 
+  /**
+   * Create Competence
+   */
   router.post('/competences/', (req, res, next) => {
-    if (!req.body) {
-      res.status(409).json({
+    if (!req.body.ref_ct) {
+      res.status(400).json({
         success: false,
-        message: 'body not provided'
+        message: 'ref_ct not provided'
+      });
+    } else if (!req.body.description_ct) {
+      res.status(400).json({
+        success: false,
+        message: 'description_ct not provided'
+      });
+    } else if (!req.body.cycle) {
+      res.status(400).json({
+        success: false,
+        message: 'cycle not provided'
       });
     } else {
       Competence.create(req.body, (err, ct) => {
         if (err) return next(err);
 
-        res.status(200).json({
+        res.status(201).json({
           success: true,
+          message: 'Object Competence saved',
           obj: ct
+        });
+      });
+    }
+  });
+
+  /**
+   * Update Competence
+   */
+  router.put('/competences/:id', (req, res, next) => {
+    if (!req.params.id) {
+      return res.status(400).json({
+        success: false,
+        message: 'id not provided'
+      });
+    } else if (!req.body) {
+      return res.status(400).json({
+        success: false,
+        message: 'body not provided'
+      });
+    } else {
+      Competence.findByIdAndUpdate(req.params.id, req.body, { new: true }, (err, ct) => {
+        if (err) return next(err);
+
+        if (!ct) {
+          return res.status(404).json({
+            success: false,
+            message: 'Object Competence not find'
+          });
+        }
+
+        return res.status(200).json({
+          success: true,
+          message: 'Object Competence updated',
+          obj: ct
+        });
+      });
+    }
+  });
+
+  /**
+   * Delete Competence
+   */
+  router.delete('/competences/:id', (req, res, next) => {
+    if (!req.params.id) {
+      return res.status(400).json({
+        success: false,
+        message: 'id not provided'
+      });
+    } else {
+      Competence.findByIdAndRemove(req.params.id, (err, ct) => {
+        if (err) return next(err);
+
+        if (!ct) {
+          return res.status(404).json({
+            success: false,
+            message: 'Object Competence not find'
+          });
+        }
+
+        return res.status(200).json({
+          success: true,
+          message: 'Object Competence removed'
         });
       });
     }
@@ -81,34 +156,34 @@ module.exports = (router) => {
   /**
    * add results à competence trouvee par eleve et par ref
    */
-  router.put('/competences/eleve/:eleve/ref/:ref_ct', (req, res, next) => {
-    if (!req.params.eleve) {
-      res.status(409).json({
-        success: false,
-        message: 'eleve id not provided'
-      });
-    } else if (!req.params.ref_ct) {
-      res.status(409).json({
-        success: false,
-        message: 'ref_ct not provided'
-      });
-    } else {
-      Competence.findOneAndUpdate({ eleve: req.params.eleve, ref_ct: req.params.ref_ct },
-        { $push: { resultats: { resultat: req.body.resultat, value: req.body.value } } }, { new: true }, (err, ct) => {
-          if (err) return next(err);
-          if (!ct) {
-            res.status(400).json({
-              success: false,
-              message: 'Competences not find'
-            });
-          }
-          return res.status(200).json({
-            success: true,
-            obj: ct
-          });
-        });
-    }
-  });
+  /*  router.put('/competences/eleve/:eleve/ref/:ref_ct', (req, res, next) => {
+     if (!req.params.eleve) {
+       res.status(409).json({
+         success: false,
+         message: 'eleve id not provided'
+       });
+     } else if (!req.params.ref_ct) {
+       res.status(409).json({
+         success: false,
+         message: 'ref_ct not provided'
+       });
+     } else {
+       Competence.findOneAndUpdate({ eleve: req.params.eleve, ref_ct: req.params.ref_ct },
+         { $push: { resultats: { resultat: req.body.resultat, value: req.body.value } } }, { new: true }, (err, ct) => {
+           if (err) return next(err);
+           if (!ct) {
+             res.status(400).json({
+               success: false,
+               message: 'Competences not find'
+             });
+           }
+           return res.status(200).json({
+             success: true,
+             obj: ct
+           });
+         });
+     }
+   }); */
 
   /**
    * update results par id à competence trouvee par eleve et par ref
@@ -147,22 +222,22 @@ module.exports = (router) => {
     }
   }); */
 
-  router.get('/competences/eleve/:eleve/ref/:ref_ct/result/:_id', (req, res, next) => {
-    Competence.findOne({ eleve: req.params.eleve, ref_ct: req.params.ref_ct, resultats: { _id: req.params._id } }, (err, ct) => {
-      if (err) return next(err);
-      if (!ct) {
-        res.json({
-          success: false,
-          message: 'result not found'
-        });
-      }
-
-      res.status(200).json({
-        success: false,
-        obj: ct
-      });
-    });
-  });
+  /*  router.get('/competences/eleve/:eleve/ref/:ref_ct/result/:_id', (req, res, next) => {
+     Competence.findOne({ eleve: req.params.eleve, ref_ct: req.params.ref_ct, resultats: { _id: req.params._id } }, (err, ct) => {
+       if (err) return next(err);
+       if (!ct) {
+         res.json({
+           success: false,
+           message: 'result not found'
+         });
+       }
+ 
+       res.status(200).json({
+         success: false,
+         obj: ct
+       });
+     });
+   }); */
 
   return router;
 }

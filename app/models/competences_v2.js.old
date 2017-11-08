@@ -1,0 +1,41 @@
+const mongoose = require('mongoose');
+mongoose.Promise = global.Promise;
+const Schema = mongoose.Schema;
+const enums = require('./common/enums');
+
+
+/**
+ * Competences par cycle défini dans DB (nombre défini et fixe a moins que l'user le modifie)
+ */
+const competenceSchema = new Schema({
+  ref_ct: {
+    type: String, // CT X.X
+    required: true,
+    unique: true
+  },
+  description_ct: {
+    type: String, // Description de la CT
+    required: true
+  },
+  cycle: {
+    type: String,
+    required: true,
+    enum: enums.CYCLES
+  },
+  resultats: [{
+    resultat: {
+      type: String,
+      enum: enums.RESULTS
+    },
+    value: {
+      type: Number,
+      enum: enums.VALUE
+    },
+    updated_at: {
+      type: Date,
+      default: new Date()
+    }
+  }]
+});
+
+module.exports = mongoose.model('Competence', competenceSchema);
