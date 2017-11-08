@@ -3,49 +3,36 @@ mongoose.Promise = global.Promise;
 const Schema = mongoose.Schema;
 const Competence = require('./competences');
 const Eleve = require('./eleves');
+const enums = require('./common/enums');
 
-// ENUMS Validators
-const RESULTS = [
-  '++',
-  '+',
-  '+/-',
-  '-'
-];
-
-const VALUE = [
-  1,
-  2,
-  3,
-  4
-];
 
 const resultatsEleveSchema = new Schema({
-  resultats: {
-    result: {
-      type: String,
-      required: true,
-      enum: RESULTS
+    resultats: {
+        result: {
+            type: String,
+            required: true,
+            enum: enums.RESULTS
+        },
+        value: {
+            type: Number,
+            required: true,
+            enum: enums.VALUE
+        },
+        updated_at: {
+            type: Date,
+            default: new Date()
+        }
     },
-    value: {
-      type: Number,
-      required: true,
-      enum: VALUE
+    competence: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Competence',
+        required: true
     },
-    updated_at: {
-      type: Date,
-      default: new Date()
+    eleve: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Eleve',
+        required: true
     }
-  },
-  competence: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Competence',
-    required: true
-  },
-  eleve: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Eleve',
-    required: true
-  }
 });
 
 module.exports = mongoose.model('ResultatsEleve', resultatsEleveSchema);

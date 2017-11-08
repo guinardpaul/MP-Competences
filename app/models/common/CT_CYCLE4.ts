@@ -1,4 +1,4 @@
-export const CT_CYCLE3 = [
+export const CT_CYCLE4 = [
   {
     'domaine': 'Domaine 1 - les langages mathématiques, scientifiques et informatique pour penser et communiquer.',
     'competences': [

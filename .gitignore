@@ -8,6 +8,9 @@ yarn-error.log*
 # Project folder
 /MP-CT
 
+# Auth Secret
+secret.js
+
 # Database
 *.mwb
 *.bak
