@@ -39,13 +39,8 @@ module.exports = (router) => {
         success: false,
         message: 'eleve id not provided'
       });
-    } else if (!req.params.competence) {
-      return res.status(400).json({
-        success: false,
-        message: 'competence id not provided'
-      });
     } else {
-      Resultat.find({ eleve: req.params.eleve, competence: req.params.competence }, (err, resultat) => {
+      Resultat.find({ eleve: req.params.eleve }, (err, resultat) => {
         if (err) return next(err);
 
         if (!resultat) {
@@ -71,6 +66,11 @@ module.exports = (router) => {
       return res.status(400).json({
         success: false,
         message: 'eleve id not provided'
+      });
+    } else if (req.params.competence) {
+      return res.status(400).json({
+        success: false,
+        message: 'competence id not provided'
       });
     } else {
       Resultat.find({ eleve: req.params.eleve }, (err, resultat) => {

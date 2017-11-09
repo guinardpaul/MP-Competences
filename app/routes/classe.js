@@ -51,6 +51,31 @@ module.exports = (router) => {
     }
   });
 
+  router.get('/classes/nom/:nom_classe', (req, res, next) => {
+    if (!req.params.nom_classe) {
+      res.status(400).json({
+        success: false,
+        message: 'nom_classe not provided'
+      });
+    } else {
+      Classe.findOne({ nom_classe: req.params.nom_classe }, (err, classe) => {
+        if (err) return next(err);
+
+        if (!classe) {
+          return res.status(404).json({
+            success: false,
+            message: 'Object Classe not find'
+          });
+        }
+
+        return res.status(200).json({
+          success: true,
+          obj: classe
+        });
+      });
+    }
+  });
+
   /**
    * Save Classe
    */

@@ -34,7 +34,7 @@ module.exports = (router) => {
   /**
    * Get One competence par ref CT
    */
-  router.get('/competences/eleve/:eleve/ref/:ref_ct', (req, res, next) => {
+  router.get('/competences/ref/:ref_ct', (req, res, next) => {
     if (!req.params.ref_ct) {
       res.status(400).json({
         success: false,

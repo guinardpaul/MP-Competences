@@ -57,6 +57,23 @@
         <li routerLinkActive="active">
           <a routerLink="home">Home</a>
         </li>
+        <!-- Gestion dropdown -->
+        <li class="dropdown" *ngIf="_authService.loggedIn()" routerLinkActive="active">
+          <a class="dropdown-toggle" data-toggle="dropdown" href="#">Gestion
+            <span class="caret"></span>
+          </a>
+          <ul class="dropdown-menu">
+            <li>
+              <a routerLink="gestion-classes">Gestion classes</a>
+            </li>
+            <li>
+              <a routerLink="gestion-eleves">Gestion élèves</a>
+            </li>
+            <li>
+              <a routerLink="gestion-competences">Gestion compétences</a>
+            </li>
+          </ul>
+        </li>
       </ul>
 
       <ul class="nav navbar-nav navbar-right">

@@ -1,3 +1,96 @@
-<p>
-  gestion-eleves works!
-</p>
+<div class="container">
+
+  <h2 class="page-header">
+    Gestion Elèves
+    <button *ngIf="selectedClasse" class="btn btn-primary btn-circle btn-lg" (click)="onAdd()">
+      <span class="glyphicon glyphicon-plus"></span>
+    </button>
+  </h2>
+
+  <span class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+
+    <select class="form-control" name="selectedClasse" id="selectedClasse" [ngModel]="selectedClasse" (ngModelChange)="loadElevesByClasse($event)">
+      <option value="undefined">Liste des Classes</option>
+      <option *ngFor="let c of listClasses" [ngValue]="c">{{c.nom_classe}}</option>
+    </select>
+    <br/>
+
+    <table *ngIf="listEleves.length > 0" class="table table-striped">
+      <thead>
+        <th>Nom</th>
+        <th>Prénom</th>
+        <th>Actions</th>
+      </thead>
+      <tbody>
+        <tr *ngFor="let eleve of listEleves">
+          <td>{{eleve.nom}}</td>
+          <td>{{eleve.prenom}}</td>
+          <td>
+            <div class="btn-group">
+              <a class="btn btn-success" [routerLink]="['/gestion-competences/', eleve._id ]">Consulter Compétences</a>
+              <button class="btn btn-warning" (click)="onUpdate(eleve)">Modifier</button>
+              <button class="btn btn-danger" data-toggle="modal" data-target="#myModal" (click)="getEleveToDelete(eleve)">Supprimer</button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <p *ngIf="listEleves.length === 0">Sélectionnez une classe et appuyer sur + pour commencer à créer des élèves</p>
+  </span>
+
+  <span class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+
+    <form *ngIf="addMode || updateMode" class="form-horizontal" [formGroup]="addEleveForm" (submit)="addOrUpdateEleve()">
+      <div class="panel-info">
+        <div class="panel-heading header">
+          <span *ngIf="addMode">Création Elève</span>
+          <span *ngIf="updateMode">Modification Elève</span>
+        </div>
+        <div class="panel-body">
+          <div class="form-group">
+            <label for="nom">Nom :</label>
+            <input class="form-control" type="text" name="nom" id="nom" formControlName="nom">
+          </div>
+          <div class="form-group">
+            <label for="prenom">Prénom :</label>
+            <input class="form-control" type="text" name="prenom" id="prenom" formControlName="prenom">
+          </div>
+          <div class="form-group">
+            <label for="classe">Classe :</label>
+            <input class="form-control" type="text" name="classe" id="classe" formControlName="classe" value="selectedClasse.nom_classe">
+          </div>
+        </div>
+        <div class="panel-footer">
+          <div class="form-group">
+            <button *ngIf="addMode" [disabled]="!addEleveForm.valid" type="submit" class="btn btn-success">Sauver</button>
+            <button *ngIf="updateMode" [disabled]="!addEleveForm.valid" type="submit" class="btn btn-warning">Modifier</button>
+            <button class="btn btn-default" (click)="closeForm()">Annuler</button>
+          </div>
+        </div>
+
+      </div>
+    </form>
+  </span>
+
+</div>
+
+<!-- Confirm delete Modal -->
+<div id="myModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Confirmer suppression</h4>
+      </div>
+      <div class="modal-body">
+        <p>Etes-vous sûr de vouloir supprimer la classe
+          <span class="header">{{eleve.nom}} {{eleve.prenom}}</span> ?</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-danger" (click)="onDelete(eleve._id)" data-dismiss="modal">Supprimer</button>
+        <button class="btn btn-default" data-dismiss="modal" (click)="closeModal()">Annuler</button>
+      </div>
+    </div>
+  </div>
+</div>

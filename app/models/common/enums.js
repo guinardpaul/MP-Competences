@@ -3,7 +3,7 @@
 /**
  * Enum Cycles
  */
-export const CYCLES = [
+module.export = CYCLES = [
     'Cycle 3',
     'Cycle 4'
 ];
@@ -11,7 +11,7 @@ export const CYCLES = [
 /**
  * Enum Results
  */
-export const RESULTS = [
+module.export = RESULTS = [
     '++',
     '+',
     '+/-',
@@ -21,7 +21,7 @@ export const RESULTS = [
 /**
  * Enum Value
  */
-export const VALUE = [
+module.export = VALUE = [
     1,
     2,
     3,

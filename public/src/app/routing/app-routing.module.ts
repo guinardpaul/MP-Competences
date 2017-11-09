@@ -9,6 +9,10 @@ import { RegisterComponent } from '../authentication/components/register/registe
 import { ForgotPasswordComponent } from '../authentication/components/forgot-password/forgot-password.component';
 import { InitPasswordComponent } from '../authentication/components/init-password/init-password.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { GestionClassesComponent } from '../gestion/gestion-classes/gestion-classes.component';
+import { GestionElevesComponent } from '../gestion/gestion-eleves/gestion-eleves.component';
+import { GestionCompetencesComponent } from '../gestion/gestion-competences/gestion-competences.component';
+
 /**
  * routes definition
  */
@@ -21,6 +25,11 @@ const routes: Routes = [
   { path: 'init-password/:_id', component: InitPasswordComponent },
   // default path redirect to 'TODO: A définir'
   { path: '', redirectTo: 'login', pathMatch: 'full' },
+  // Gestion path
+  { path: 'gestion-classes', component: GestionClassesComponent, canActivate: [ AuthGuard ] },
+  { path: 'gestion-eleves', component: GestionElevesComponent, canActivate: [ AuthGuard ] },
+  { path: 'gestion-eleves/:id', component: GestionElevesComponent, canActivate: [ AuthGuard ] },
+  { path: 'gestion-competences', component: GestionCompetencesComponent, canActivate: [ AuthGuard ] },
   // Undefined page path
   { path: '**', component: PageNotFoundComponent }
 ];
