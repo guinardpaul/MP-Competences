@@ -95,6 +95,8 @@ export class GestionElevesComponent implements OnInit {
   loadElevesByClasse(classe: Classe) {
     this.selectedClasse = classe;
     this.getAllElevesByClasse(classe._id);
+    this.addMode = false;
+    this.updateMode = false;
   }
 
   onAdd() {

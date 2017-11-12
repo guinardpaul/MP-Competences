@@ -33,8 +33,7 @@ module.exports = (passport) => {
         obj: {
           nom: user.nom,
           prenom: user.prenom,
-          email: email,
-          numTel: user.numTel
+          email: email
         }
       });
     });

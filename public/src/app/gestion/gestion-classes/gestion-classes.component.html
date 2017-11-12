@@ -48,7 +48,12 @@
               (ngModelChange)="loadCycle($event)">
               <option value="">Cycles</option>
               <option *ngFor="let c of listCycles" [value]="c">{{c}}</option>
+              <option value="addCycle">Ajouter un cycle...</option>
             </select>
+          </div>
+          <div *ngIf="selectedCycle === 'addCycle'" class="form-group">
+            <label for="cycle">Ajouter un cycle</label>
+            <input class="form-control" type="text" name="cycle" id="cycle">
           </div>
         </div>
         <div class="panel-footer">

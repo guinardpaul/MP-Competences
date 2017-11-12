@@ -80,7 +80,7 @@
         <li *ngIf="!_authService.loggedIn()" routerLinkActive="active">
           <a routerLink="login">Login</a>
         </li>
-        <li *ngIf="!_authService.loggedIn()" routerLinkActive="active">
+        <li *ngIf="_authService.loggedIn()" routerLinkActive="active">
           <a routerLink="register">Register</a>
         </li>
         <li *ngIf="_authService.loggedIn()">

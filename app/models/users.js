@@ -3,6 +3,7 @@ mongoose.Promise = global.Promise;
 const Schema = mongoose.Schema;
 const bcrypt = require('bcrypt-nodejs');
 const config = require('../config/config.prod');
+const secret = require('../config/secret');
 const jwt = require('jsonwebtoken');
 
 // Validate Function to check if valid e-mail format
@@ -59,7 +60,6 @@ userSchema.pre('save', function (next) {
 
   bcrypt.hash(this.password, null, null, (err, hash) => {
     if (err) return next(err);
-    console.log(this.password);
     this.password = hash;
     next();
   });
@@ -93,7 +93,7 @@ userSchema.methods.generateToken = function (_id) {
   return jwt.sign({
     userId: _id,
     exp: parseInt(expiry.getTime() / 1000),
-  }, config.secret);
+  }, secret.secret);
 };
 
 module.exports = mongoose.model('User', userSchema);
