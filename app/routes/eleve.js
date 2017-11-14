@@ -10,10 +10,7 @@ module.exports = (router) => {
     Eleve.find((err, eleves) => {
       if (err) return next(err);
 
-      return res.status(200).json({
-        success: true,
-        obj: eleves
-      });
+      return res.status(200).json(eleves);
     });
   });
 
@@ -37,10 +34,7 @@ module.exports = (router) => {
           });
         }
 
-        return res.status(200).json({
-          success: true,
-          obj: eleves
-        });
+        return res.status(200).json(eleves);
       });
     }
   });

@@ -10,9 +10,9 @@ const enums = require('./common/enums');
 const competenceSchema = new Schema({
     ref_ct: {
         type: String, // CT X.X
-        required: true,
+        required: true
         // trouver moyen pour rendre ref unique
-        unique: true
+        /* unique: true */
     },
     description_ct: {
         type: String, // Description de la CT

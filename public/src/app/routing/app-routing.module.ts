@@ -18,7 +18,7 @@ import { GestionCompetencesComponent } from '../gestion/gestion-competences/gest
  */
 const routes: Routes = [
   // Auth routes
-  { path: 'login', component: LoginComponent, canActivate: [ NotAuthGuard ] },
+  { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent, canActivate: [ AuthGuard ] },
   { path: 'forgot-password', component: ForgotPasswordComponent, canActivate: [ NotAuthGuard ] },
   { path: 'init-password', component: InitPasswordComponent },

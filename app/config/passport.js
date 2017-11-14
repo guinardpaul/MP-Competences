@@ -105,7 +105,11 @@ module.exports = (passport) => {
               return done(null, newUser, {
                 success: true,
                 message: 'User registered',
-                obj: newUser
+                obj: {
+                  nom: newUser.nom,
+                  prenom: newUser.prenom,
+                  email: newUser.email
+                }
               });
             }
           });

@@ -16,10 +16,7 @@ module.exports = (router) => {
           message: 'Object Classe not find'
         });
       }
-      return res.status(200).json({
-        success: true,
-        obj: classes
-      });
+      return res.status(200).json(classes);
     });
   });
 

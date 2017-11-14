@@ -15,7 +15,7 @@
         <th>Actions</th>
       </thead>
       <tbody>
-        <tr *ngFor="let classe of listClasses">
+        <tr *ngFor="let classe of listClasses | async">
           <td>{{classe.nom_classe}}</td>
           <td>{{classe.cycle}}</td>
           <td>
@@ -33,7 +33,7 @@
   <span class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 
     <form *ngIf="addMode || updateMode" class="form-horizontal" [formGroup]="addClasseForm" (submit)="addOrUpdateClasse()">
-      <div class="panel-info">
+      <div [ngClass]="addMode ? 'panel-info' : 'panel-warning'">
         <div class="panel-heading header">
           <span *ngIf="addMode">Création Classe</span>
           <span *ngIf="updateMode">Modification Classe</span>
@@ -48,13 +48,13 @@
               (ngModelChange)="loadCycle($event)">
               <option value="">Cycles</option>
               <option *ngFor="let c of listCycles" [value]="c">{{c}}</option>
-              <option value="addCycle">Ajouter un cycle...</option>
+              <!-- <option value="addCycle">Ajouter un cycle...</option> -->
             </select>
           </div>
-          <div *ngIf="selectedCycle === 'addCycle'" class="form-group">
+          <!-- <div *ngIf="selectedCycle === 'addCycle'" class="form-group">
             <label for="cycle">Ajouter un cycle</label>
             <input class="form-control" type="text" name="cycle" id="cycle">
-          </div>
+          </div> -->
         </div>
         <div class="panel-footer">
           <div class="form-group">

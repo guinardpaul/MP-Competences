@@ -11,18 +11,18 @@
 
     <select class="form-control" name="selectedClasse" id="selectedClasse" [ngModel]="selectedClasse" (ngModelChange)="loadElevesByClasse($event)">
       <option value="undefined">Liste des Classes</option>
-      <option *ngFor="let c of listClasses" [ngValue]="c">{{c.nom_classe}}</option>
+      <option *ngFor="let c of listClasses | async" [ngValue]="c">{{c.nom_classe}}</option>
     </select>
     <br/>
 
-    <table *ngIf="listEleves.length > 0" class="table table-striped">
+    <table *ngIf="selectedClasse !== undefined || listEleves.length > 0" class="table table-striped">
       <thead>
         <th>Nom</th>
         <th>Prénom</th>
         <th>Actions</th>
       </thead>
       <tbody>
-        <tr *ngFor="let eleve of listEleves">
+        <tr *ngFor="let eleve of listEleves | async">
           <td>{{eleve.nom}}</td>
           <td>{{eleve.prenom}}</td>
           <td>
@@ -35,13 +35,14 @@
         </tr>
       </tbody>
     </table>
-    <p *ngIf="listEleves.length === 0">Sélectionnez une classe et appuyer sur + pour commencer à créer des élèves</p>
+
+    <p *ngIf="listEleves === undefined || selectedClasse === undefined">Sélectionnez une classe pour commencer à gérer les élèves</p>
   </span>
 
   <span class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 
     <form *ngIf="addMode || updateMode" class="form-horizontal" [formGroup]="addEleveForm" (submit)="addOrUpdateEleve()">
-      <div class="panel-info">
+      <div [ngClass]="addMode ? 'panel-info' : 'panel-warning'">
         <div class="panel-heading header">
           <span *ngIf="addMode">Création Elève</span>
           <span *ngIf="updateMode">Modification Elève</span>

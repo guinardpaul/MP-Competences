@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 import { ClassesService } from '../../shared/services/classes.service';
 import { Classe } from '../../shared/models/classe';
@@ -10,7 +11,7 @@ import { CYCLES } from '../../shared/models/common/enums';
   styleUrls: [ './gestion-classes.component.css' ]
 })
 export class GestionClassesComponent implements OnInit {
-  listClasses: Classe[];
+  listClasses: Observable<Classe[]>;
   classe: Classe;
   selectedCycle: string;
   addMode: boolean;
@@ -25,7 +26,6 @@ export class GestionClassesComponent implements OnInit {
     private _classesService: ClassesService,
     private _fb: FormBuilder
   ) {
-    this.listClasses = [];
     this.classe = new Classe();
     this.selectedCycle = '';
     this.addMode = false;
@@ -50,15 +50,12 @@ export class GestionClassesComponent implements OnInit {
   }
 
   getAllClasses() {
-    this._classesService.getAllClasses()
-      .subscribe(data => {
-        this.listClasses = data.obj;
-      }, err => {
-        console.log(err);
-      });
+    this._classesService.getAllClasses();
+    this.listClasses = this._classesService.listClasses;
   }
 
   onUpdate(classe: Classe) {
+    this.createForm();
     this.classe = classe;
     this.selectedCycle = classe.cycle;
     this.addClasseForm.get('nom_classe').setValue(classe.nom_classe);
@@ -72,12 +69,8 @@ export class GestionClassesComponent implements OnInit {
   }
 
   onDelete(classe_id: number) {
-    this._classesService.deleteClasse(classe_id)
-      .subscribe(data => {
-        console.log(data);
-      }, err => {
-        console.log(err);
-      });
+    this._classesService.deleteClasse(classe_id);
+    this.onSuccess();
   }
 
   closeModal() {
@@ -85,6 +78,9 @@ export class GestionClassesComponent implements OnInit {
   }
 
   onAdd() {
+    this.createForm();
+    this.classe = new Classe();
+    this.selectedCycle = '';
     this.addMode = true;
     this.updateMode = false;
   }
@@ -96,12 +92,7 @@ export class GestionClassesComponent implements OnInit {
         cycle: this.cycle
       });
 
-      this._classesService.saveClasse(classe)
-        .subscribe(data => {
-          console.log(data);
-        }, err => {
-          console.log(err);
-        });
+      this._classesService.saveClasse(classe);
     } else {
       const classe = new Classe({
         _id: this.classe._id,
@@ -109,18 +100,21 @@ export class GestionClassesComponent implements OnInit {
         cycle: this.cycle
       });
 
-      this._classesService.updateClasse(classe)
-        .subscribe(data => {
-          console.log(data);
-        }, err => {
-          console.log(err);
-        });
+      this._classesService.updateClasse(classe);
     }
+    this.onSuccess();
   }
 
   closeForm() {
     this.addMode = false;
     this.updateMode = false;
+  }
+
+  onSuccess() {
+    this.addMode = false;
+    this.updateMode = false;
+    this.classe = new Classe();
+    this.createForm();
   }
 
   ngOnInit() {

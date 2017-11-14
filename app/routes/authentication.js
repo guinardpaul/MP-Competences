@@ -37,13 +37,9 @@ module.exports = (router, passport) => {
         if (!user) {
           return res.status(404).json(info);
         }
-        req.login(user, function (err) {
-          if (err) {
-            console.log(err);
-            return next(err);
-          }
-          return res.status(201).json(info);
-        });
+
+        return res.status(201).json(info);
+
       })(req, res, next);
     }
   });

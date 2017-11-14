@@ -186,3 +186,7 @@ html {
 .error {
     font-size: 110% !important;
 }
+
+.cursor {
+    cursor: pointer;
+}

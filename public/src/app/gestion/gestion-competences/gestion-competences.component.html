@@ -1,3 +1,99 @@
-<p>
-  gestion-competences works!
-</p>
+<div class="container">
+
+  <h2 class="page-header">
+    Gestion Compétences
+    <!-- Button add -->
+    <button *ngIf="selectedCycle" class="btn btn-primary btn-circle btn-lg" (click)="onAdd()">
+      <span class="glyphicon glyphicon-plus"></span>
+    </button>
+  </h2>
+
+  <span class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+    <!-- Select cycle -->
+    <select class="form-control" name="selectedCycle" id="selectedCycle" [ngModel]="selectedCycle" [ngModelOptions]="{standalone: true}"
+      (ngModelChange)="loadCycle($event)">
+      <option value="">Cycles</option>
+      <option *ngFor="let c of listCycles" [value]="c">{{c}}</option>
+    </select>
+    <br/>
+
+    <!-- Tableaux competences par cycle -->
+    <table *ngIf="listCompetences.length > 0" class="table table-striped">
+      <thead>
+        <th>ref</th>
+        <th>description</th>
+        <th>Actions</th>
+      </thead>
+      <tbody>
+        <tr *ngFor="let ct of listCompetences">
+          <td>{{ct.ref_ct}}</td>
+          <td>{{ct.description_ct}}</td>
+          <td>
+            <div class="btn-group-vertical">
+              <button class="btn btn-warning" (click)="onUpdate(ct)">Modifier</button>
+              <button class="btn btn-danger" data-toggle="modal" data-target="#myModal" (click)="getCompetenceToDelete(ct)">Supprimer</button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <p *ngIf="listCompetences.length === 0">Sélectionnez un
+      <b>cycle</b> pour commencer à gérer les compétences</p>
+  </span>
+
+  <span class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+
+    <form *ngIf="addMode || updateMode" class="form-horizontal" [formGroup]="addCompetenceForm" (submit)="addOrUpdateCompetence()">
+      <div class="panel-info">
+        <div class="panel-heading header">
+          <span *ngIf="addMode">Création Compétence</span>
+          <span *ngIf="updateMode">Modification Compétence</span>
+        </div>
+        <div class="panel-body">
+          <div class="form-group">
+            <label for="ref_ct">Ref :</label>
+            <input class="form-control" type="text" name="ref_ct" id="ref_ct" formControlName="ref_ct">
+          </div>
+          <div class="form-group">
+            <label for="description_ct">Description :</label>
+            <textarea class="form-control" type="text" name="description_ct" id="description_ct" formControlName="description_ct"></textarea>
+          </div>
+          <div class="form-group">
+            <label for="cycle">Cycle :</label>
+            <input type="text" id="cycle" name="cycle" formControlName="cycle" class="form-control">
+          </div>
+        </div>
+        <div class="panel-footer">
+          <div class="form-group">
+            <button *ngIf="addMode" [disabled]="!addCompetenceForm.valid" type="submit" class="btn btn-success">Sauver</button>
+            <button *ngIf="updateMode" [disabled]="!addCompetenceForm.valid" type="submit" class="btn btn-warning">Modifier</button>
+            <button class="btn btn-default" (click)="closeForm()">Annuler</button>
+          </div>
+        </div>
+
+      </div>
+    </form>
+  </span>
+
+</div>
+
+<!-- Confirm delete Modal -->
+<div id="myModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Confirmer suppression</h4>
+      </div>
+      <div class="modal-body">
+        <p>Etes-vous sûr de vouloir supprimer la compétence
+          <span class="header">{{competence.ref_ct}} {{competence.description_ct}}</span> ?</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-danger" (click)="onDelete(competence._id)" data-dismiss="modal">Supprimer</button>
+        <button class="btn btn-default" data-dismiss="modal" (click)="closeModal()">Annuler</button>
+      </div>
+    </div>
+  </div>
+</div>

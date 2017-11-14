@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Observable } from 'rxjs/Observable';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 import { ElevesService } from '../../shared/services/eleves.service';
 import { ClassesService } from '../../shared/services/classes.service';
@@ -12,13 +13,13 @@ import { Classe } from '../../shared/models/classe';
   styleUrls: [ './gestion-eleves.component.css' ]
 })
 export class GestionElevesComponent implements OnInit {
-  listEleves: Eleve[];
+  listEleves: Observable<Eleve[]>;
   eleve: Eleve;
   selectedClasse: Classe;
   objClasse: Classe;
   addMode: boolean;
   updateMode: boolean;
-  listClasses: Classe[];
+  listClasses: Observable<Classe[]>;
   addEleveForm: FormGroup;
 
   get nom(): string { return this.addEleveForm.get('nom').value as string; }
@@ -31,7 +32,6 @@ export class GestionElevesComponent implements OnInit {
     private _fb: FormBuilder,
     private _activatedRoute: ActivatedRoute
   ) {
-    this.listEleves = [];
     this.eleve = new Eleve();
     this.objClasse = new Classe();
     this.addMode = false;
@@ -53,59 +53,54 @@ export class GestionElevesComponent implements OnInit {
     });
   }
 
-  getAllEleves() {
-    this.listEleves = [];
-    this._elevesService.getAllEleves()
-      .subscribe(data => {
-        this.listEleves = data.obj;
-      }, err => {
-        console.log(err);
-      });
-  }
-
-  getAllElevesByClasse(id_classe: number) {
-    this.listEleves = [];
-    this._elevesService.getElevesByClasse(id_classe)
-      .subscribe(data => {
-        this.listEleves = data.obj;
-      }, err => {
-        console.log(err);
-      });
-  }
-
-  getAllClasses() {
-    this.listClasses = [];
-    this._classesService.getAllClasses()
-      .subscribe(data => {
-        this.listClasses = data.obj;
-      }, err => {
-        console.log(err);
-      });
-  }
-
-  getClasseById(id_classe: number) {
-    this._classesService.getClasseById(id_classe)
-      .subscribe(data => {
-        this.objClasse = data.obj;
-      }, err => {
-        console.log(err);
-      });
-  }
-
-  loadElevesByClasse(classe: Classe) {
-    this.selectedClasse = classe;
+  loadElevesByClasse(classe) {
+    if (classe === 'undefined') {
+      this.selectedClasse = undefined;
+    } else {
+      this.selectedClasse = classe;
+    }
     this.getAllElevesByClasse(classe._id);
     this.addMode = false;
     this.updateMode = false;
   }
 
+  getAllEleves() {
+    this._elevesService.getAllEleves();
+    this.listEleves = this._elevesService.listEleves;
+  }
+
+  getAllElevesByClasse(id_classe: number) {
+    if (id_classe !== undefined) {
+      this._elevesService.getElevesByClasse(id_classe);
+      this.listEleves = this._elevesService.listEleves;
+    }
+  }
+
+  getAllClasses() {
+    this._classesService.getAllClasses();
+    this.listClasses = this._classesService.listClasses;
+  }
+
+  getClasseById(id_classe: number) {
+    this._classesService.getClasseById(id_classe)
+      .subscribe(data => {
+        this.selectedClasse = data.obj;
+        console.log(this.selectedClasse);
+      }, err => {
+        console.log(err);
+      });
+  }
+
   onAdd() {
+    this.createForm();
+    this.eleve = new Eleve();
     this.addMode = true;
     this.updateMode = false;
     this.addEleveForm.get('classe').setValue(this.selectedClasse.nom_classe);
   }
 
   onUpdate(eleve: Eleve) {
+    this.createForm();
     this.eleve = eleve;
     this.addEleveForm.get('nom').setValue(eleve.nom);
     this.addEleveForm.get('prenom').setValue(eleve.prenom);
@@ -119,12 +114,8 @@ export class GestionElevesComponent implements OnInit {
   }
 
   onDelete(eleve_id: number) {
-    this._elevesService.deleteEleve(eleve_id)
-      .subscribe(data => {
-        console.log(data);
-      }, err => {
-        console.log(err);
-      });
+    this._elevesService.deleteEleve(eleve_id);
+    this.onSuccess();
   }
 
   closeModal() {
@@ -139,12 +130,7 @@ export class GestionElevesComponent implements OnInit {
         classe: this.objClasse._id
       });
 
-      this._elevesService.saveEleve(eleve)
-        .subscribe(data => {
-          console.log(data);
-        }, err => {
-          console.log(err);
-        });
+      this._elevesService.saveEleve(eleve);
     } else {
       const eleve = new Eleve({
         nom: this.nom,
@@ -152,16 +138,18 @@ export class GestionElevesComponent implements OnInit {
         classe: this.objClasse._id
       });
 
-      this._elevesService.updateEleve(eleve)
-        .subscribe(data => {
-          console.log(data);
-        }, err => {
-          console.log(err);
-        });
+      this._elevesService.updateEleve(eleve);
     }
+    this.onSuccess();
   }
 
   closeForm() {
+    this.addMode = false;
+    this.updateMode = false;
+  }
+
+  onSuccess() {
+    this.eleve = new Eleve();
     this.addMode = false;
     this.updateMode = false;
   }
@@ -170,13 +158,13 @@ export class GestionElevesComponent implements OnInit {
     // Load Classes pour select
     this.getAllClasses();
 
-    // Load list Eleves
-    /* if (this._activatedRoute.snapshot.params[ 'id' ] !== undefined) {
-      this.getAllElevesByClasse(this._activatedRoute.snapshot.params[ 'id' ]);
+    // Load list Eleves si params id
+    if (this._activatedRoute.snapshot.params[ 'id' ] !== undefined) {
       this.getClasseById(this._activatedRoute.snapshot.params[ 'id' ]);
+      this.getAllElevesByClasse(this._activatedRoute.snapshot.params[ 'id' ]);
     } else {
       this.getAllEleves();
-    } */
+    }
   }
 
 }
