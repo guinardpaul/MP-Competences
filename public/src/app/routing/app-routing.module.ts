@@ -23,13 +23,13 @@ const routes: Routes = [
   { path: 'forgot-password', component: ForgotPasswordComponent, canActivate: [ NotAuthGuard ] },
   { path: 'init-password', component: InitPasswordComponent },
   { path: 'init-password/:_id', component: InitPasswordComponent },
-  // default path redirect to 'TODO: A définir'
-  { path: '', redirectTo: 'login', pathMatch: 'full' },
   // Gestion path
   { path: 'gestion-classes', component: GestionClassesComponent, canActivate: [ AuthGuard ] },
   { path: 'gestion-eleves', component: GestionElevesComponent, canActivate: [ AuthGuard ] },
   { path: 'gestion-eleves/:id', component: GestionElevesComponent, canActivate: [ AuthGuard ] },
   { path: 'gestion-competences', component: GestionCompetencesComponent, canActivate: [ AuthGuard ] },
+  // default path redirect to 'TODO: A définir'
+  { path: '', redirectTo: 'gestion-classes', pathMatch: 'full' },
   // Undefined page path
   { path: '**', component: PageNotFoundComponent }
 ];

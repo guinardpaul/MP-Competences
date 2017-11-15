@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
+import { Observable } from 'rxjs/Observable';
 // Models
 import { CYCLES } from '../../shared/models/common/enums';
 import { Competence } from '../../shared/models/competence';
@@ -14,10 +15,11 @@ import { CompetencesService } from '../../shared/services/competences.service';
 export class GestionCompetencesComponent implements OnInit {
   selectedCycle: string;
   listCycles = CYCLES;
-  listCompetences: Competence[];
+  listCompetences: Observable<Competence[]>;
   competence: Competence;
   addMode: boolean;
   updateMode: boolean;
+  validRefCTUnicite: boolean;
   addCompetenceForm: FormGroup;
 
   get ref_ct(): string { return this.addCompetenceForm.get('ref_ct').value as string; }
@@ -29,7 +31,6 @@ export class GestionCompetencesComponent implements OnInit {
     private _fb: FormBuilder
   ) {
     this.selectedCycle = '';
-    this.listCompetences = [];
     this.addMode = false;
     this.updateMode = false;
     this.competence = new Competence();
@@ -57,24 +58,23 @@ export class GestionCompetencesComponent implements OnInit {
   }
 
   getCompetencesByCycle(cycle: string) {
-    this.listCompetences = [];
-    this._competencesService.getCompetenceByCycle(cycle)
-      .subscribe(data => {
-        this.listCompetences = data.obj;
-      }, err => {
-        console.log(err);
-      });
+    this._competencesService.getCompetenceByCycle(cycle);
+    this.listCompetences = this._competencesService.listCompetences;
   }
 
   onAdd() {
+    this.createForm();
+    this.competence = new Competence();
     this.addMode = true;
     this.updateMode = false;
+    this.validRefCTUnicite = false;
     this.addCompetenceForm.get('cycle').setValue(this.selectedCycle);
   }
 
   onUpdate(ct: Competence) {
     this.addMode = false;
     this.updateMode = true;
+    this.validRefCTUnicite = false;
     this.addCompetenceForm.get('ref_ct').setValue(ct.ref_ct);
     this.addCompetenceForm.get('description_ct').setValue(ct.description_ct);
     this.addCompetenceForm.get('cycle').setValue(ct.cycle);
@@ -89,26 +89,18 @@ export class GestionCompetencesComponent implements OnInit {
         cycle: this.selectedCycle
       });
 
-      this._competencesService.saveCompetence(ct)
-        .subscribe(data => {
-          console.log(data);
-        }, err => {
-          console.log(err);
-        });
+      this._competencesService.saveCompetence(ct);
     } else {
       const ct = new Competence({
+        _id: this.competence._id,
         ref_ct: this.ref_ct,
         description_ct: this.description_ct,
         cycle: this.selectedCycle
       });
 
-      this._competencesService.updateCompetence(ct)
-        .subscribe(data => {
-          console.log(data);
-        }, err => {
-          console.log(err);
-        });
+      this._competencesService.updateCompetence(ct);
     }
+    this.onSuccess();
   }
 
   getCompetenceToDelete(ct: Competence) {
@@ -116,17 +108,36 @@ export class GestionCompetencesComponent implements OnInit {
   }
 
   onDelete(ct_id: number) {
-    this._competencesService.deleteCompetence(ct_id)
-      .subscribe(data => {
-        console.log(data);
-      }, err => {
-        console.log(err);
-      });
+    this._competencesService.deleteCompetence(ct_id);
+    this.onSuccess();
+  }
+
+  onSuccess() {
+    this.addMode = false;
+    this.updateMode = false;
+    this.competence = new Competence();
+    this.createForm();
+  }
+
+  checkRefUnicite() {
+    this.validRefCTUnicite = false;
+
+    if (this.ref_ct !== '' && !this.updateMode) {
+      this._competencesService.checkRefUnicite(this.cycle, this.ref_ct)
+        .subscribe(data => {
+          if (!data.success) {
+            this.validRefCTUnicite = true;
+          }
+        }, err => {
+          console.log(err);
+        });
+    }
   }
 
   closeForm() {
     this.addMode = false;
     this.updateMode = false;
+    this.competence = new Competence();
   }
 
   closeModal() {

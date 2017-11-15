@@ -18,14 +18,14 @@
     <br/>
 
     <!-- Tableaux competences par cycle -->
-    <table *ngIf="listCompetences.length > 0" class="table table-striped">
+    <table *ngIf="selectedCycle !== ''" class="table table-striped">
       <thead>
         <th>ref</th>
         <th>description</th>
         <th>Actions</th>
       </thead>
       <tbody>
-        <tr *ngFor="let ct of listCompetences">
+        <tr *ngFor="let ct of listCompetences | async">
           <td>{{ct.ref_ct}}</td>
           <td>{{ct.description_ct}}</td>
           <td>
@@ -37,22 +37,27 @@
         </tr>
       </tbody>
     </table>
-    <p *ngIf="listCompetences.length === 0">Sélectionnez un
+    <p *ngIf="listCompetences === undefined">Sélectionnez un
       <b>cycle</b> pour commencer à gérer les compétences</p>
   </span>
 
   <span class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 
     <form *ngIf="addMode || updateMode" class="form-horizontal" [formGroup]="addCompetenceForm" (submit)="addOrUpdateCompetence()">
-      <div class="panel-info">
+      <div [ngClass]="addMode ? 'panel-info' : 'panel-warning'">
         <div class="panel-heading header">
           <span *ngIf="addMode">Création Compétence</span>
           <span *ngIf="updateMode">Modification Compétence</span>
         </div>
         <div class="panel-body">
           <div class="form-group">
-            <label for="ref_ct">Ref :</label>
-            <input class="form-control" type="text" name="ref_ct" id="ref_ct" formControlName="ref_ct">
+            <label for="ref_ct">Référence :</label>
+            <input class="form-control" type="text" name="ref_ct" id="ref_ct" formControlName="ref_ct" (blur)="checkRefUnicite()">
+            <ul class="list-group">
+              <li *ngIf="validRefCTUnicite" class="list-group-item list-group-item-danger">
+                La référence est déjà utilisée pour une compétence de ce cycle.
+              </li>
+            </ul>
           </div>
           <div class="form-group">
             <label for="description_ct">Description :</label>
@@ -65,8 +70,8 @@
         </div>
         <div class="panel-footer">
           <div class="form-group">
-            <button *ngIf="addMode" [disabled]="!addCompetenceForm.valid" type="submit" class="btn btn-success">Sauver</button>
-            <button *ngIf="updateMode" [disabled]="!addCompetenceForm.valid" type="submit" class="btn btn-warning">Modifier</button>
+            <button *ngIf="addMode" [disabled]="!addCompetenceForm.valid || validRefCTUnicite" type="submit" class="btn btn-success">Sauver</button>
+            <button *ngIf="updateMode" [disabled]="!addCompetenceForm.valid || validRefCTUnicite" type="submit" class="btn btn-warning">Modifier</button>
             <button class="btn btn-default" (click)="closeForm()">Annuler</button>
           </div>
         </div>

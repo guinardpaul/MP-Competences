@@ -78,13 +78,19 @@
 
       <ul class="nav navbar-nav navbar-right">
         <li *ngIf="!_authService.loggedIn()" routerLinkActive="active">
-          <a routerLink="login">Login</a>
+          <a routerLink="login">
+            <span class="glyphicon glyphicon-log-in"></span> Se connecter
+          </a>
         </li>
         <li *ngIf="_authService.loggedIn()" routerLinkActive="active">
-          <a routerLink="register">Register</a>
+          <a routerLink="register">
+            <span class="glyphicon glyphicon-user"></span> Créer un compte
+          </a>
         </li>
         <li *ngIf="_authService.loggedIn()">
-          <a class="cursor" (click)="onLogout()">Logout</a>
+          <a class="cursor" (click)="onLogout()">
+            <span class="glyphicon glyphicon-log-out"></span> Se déconnecter
+          </a>
         </li>
       </ul>
 

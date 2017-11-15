@@ -23,10 +23,7 @@ module.exports = (router) => {
           });
         }
 
-        return res.status(200).json({
-          success: true,
-          obj: ct
-        });
+        return res.status(200).json(ct);
       });
     }
   });
@@ -54,6 +51,39 @@ module.exports = (router) => {
         return res.status(200).json({
           success: true,
           obj: ct
+        });
+      });
+    }
+  });
+
+  /**
+   * Check unicité ref CT
+   */
+  router.get('/competences/cycle/:cycle/ref/:ref_ct', (req, res, next) => {
+    if (!req.params.cycle) {
+      res.status(400).json({
+        success: false,
+        message: 'Cycle not provided'
+      });
+    } else if (!req.params.ref_ct) {
+      res.status(400).json({
+        success: false,
+        message: 'ref CT not provided'
+      });
+    } else {
+      Competence.findOne({ ref_ct: req.params.ref_ct, cycle: req.params.cycle }, (err, ct) => {
+        if (err) return next(err);
+
+        if (!ct) {
+          return res.status(200).json({
+            success: true,
+            message: 'Ref CT disponible'
+          });
+        }
+
+        return res.status(200).json({
+          success: false,
+          message: 'Ref CT déjà utilisée par une compétence'
         });
       });
     }
