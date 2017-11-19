@@ -31,6 +31,7 @@ const auth = require('./app/routes/authentication')(router, passport);
 const classe = require('./app/routes/classe')(router);
 const eleve = require('./app/routes/eleve')(router);
 const competence = require('./app/routes/competence')(router);
+const domaine = require('./app/routes/domaine')(router);
 
 // MIDDLEWARE
 // log into console (dev)
@@ -60,6 +61,7 @@ app.use('/api/auth', auth);
 app.use('/api', classe);
 app.use('/api', eleve);
 app.use('/api', competence);
+app.use('/api', domaine);
 
 // allow to refresh page
 // send back to dist/index.html

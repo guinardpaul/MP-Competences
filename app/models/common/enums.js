@@ -27,3 +27,12 @@ module.export = VALUE = [
     3,
     4
 ];
+
+/**
+ * Enum Trimèstre
+ */
+module.exports = TRIMESTRE = [
+    'Trimestre 1',
+    'Trimestre 2',
+    'Trimestre 3'
+];

@@ -17,28 +17,33 @@
     </select>
     <br/>
 
+    <!-- On selecte cycle => Tableaux domaines -->
+    <!-- On selecte domaine => tableaux competences -->
+
     <!-- Tableaux competences par cycle -->
     <table *ngIf="selectedCycle !== ''" class="table table-striped">
       <thead>
-        <th>ref</th>
+        <th class="ref-width">ref</th>
         <th>description</th>
         <th>Actions</th>
       </thead>
       <tbody>
-        <tr *ngFor="let ct of listCompetences | async">
-          <td>{{ct.ref_ct}}</td>
-          <td>{{ct.description_ct}}</td>
+        <tr *ngFor="let domaine of listDomaines | async | sortByRefCt: 'ref_domaine'">
+          <td>{{domaine.ref_domaine}}</td>
+          <td>{{domaine.description_domaine}}</td>
           <td>
             <div class="btn-group-vertical">
-              <button class="btn btn-warning" (click)="onUpdate(ct)">Modifier</button>
-              <button class="btn btn-danger" data-toggle="modal" data-target="#myModal" (click)="getCompetenceToDelete(ct)">Supprimer</button>
+              <button class="btn btn-warning" (click)="onUpdate(domaine)">Modifier</button>
+              <button class="btn btn-danger" data-toggle="modal" data-target="#myModal" (click)="getCompetenceToDelete(domaine)">Supprimer</button>
             </div>
           </td>
         </tr>
       </tbody>
     </table>
-    <p *ngIf="listCompetences === undefined">Sélectionnez un
-      <b>cycle</b> pour commencer à gérer les compétences</p>
+
+    <p *ngIf="listDomaines === undefined">Sélectionnez un
+      <b>cycle</b> pour commencer à gérer les compétences
+    </p>
   </span>
 
   <span class="col-xs-12 col-sm-6 col-md-6 col-lg-6">

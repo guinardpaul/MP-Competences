@@ -12,6 +12,7 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import { GestionClassesComponent } from '../gestion/gestion-classes/gestion-classes.component';
 import { GestionElevesComponent } from '../gestion/gestion-eleves/gestion-eleves.component';
 import { GestionCompetencesComponent } from '../gestion/gestion-competences/gestion-competences.component';
+import { ResultatsCompetenceElevesComponent } from '../resultats/resultats-competence-eleves/resultats-competence-eleves.component';
 
 /**
  * routes definition
@@ -28,6 +29,8 @@ const routes: Routes = [
   { path: 'gestion-eleves', component: GestionElevesComponent, canActivate: [ AuthGuard ] },
   { path: 'gestion-eleves/:id', component: GestionElevesComponent, canActivate: [ AuthGuard ] },
   { path: 'gestion-competences', component: GestionCompetencesComponent, canActivate: [ AuthGuard ] },
+  // Résultats élèves path
+  { path: 'resultats-competences', component: ResultatsCompetenceElevesComponent, canActivate: [ AuthGuard ] },
   // default path redirect to 'TODO: A définir'
   { path: '', redirectTo: 'gestion-classes', pathMatch: 'full' },
   // Undefined page path

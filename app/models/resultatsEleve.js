@@ -32,6 +32,11 @@ const resultatsEleveSchema = new Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Eleve',
         required: true
+    },
+    trimestre: {
+        type: String,
+        enum: enums.TRIMESTRE,
+        required: true
     }
 });
 

@@ -8,6 +8,9 @@ import { GestionElevesComponent } from './gestion-eleves/gestion-eleves.componen
 import { GestionClassesComponent } from './gestion-classes/gestion-classes.component';
 import { GestionCompetencesComponent } from './gestion-competences/gestion-competences.component';
 import { MaterialModule } from '../shared/material.module';
+// Pipes
+import { SortByStringPipe } from '../shared/pipes/sort-by-string.pipe';
+import { SortByRefCtPipe } from '../shared/pipes/sort-by-ref-ct.pipe';
 
 @NgModule({
   imports: [
@@ -20,7 +23,9 @@ import { MaterialModule } from '../shared/material.module';
   declarations: [
     GestionClassesComponent,
     GestionCompetencesComponent,
-    GestionElevesComponent
+    GestionElevesComponent,
+    SortByStringPipe,
+    SortByRefCtPipe
   ],
   exports: [
     GestionClassesComponent,

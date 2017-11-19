@@ -3,7 +3,6 @@ mongoose.Promise = global.Promise;
 const Schema = mongoose.Schema;
 const enums = require('./common/enums');
 
-
 /**
  * Competences par cycle défini dans DB (nombre défini et fixe a moins que l'user le modifie)
  */
@@ -11,17 +10,22 @@ const competenceSchema = new Schema({
     ref_ct: {
         type: String, // CT X.X
         required: true
-        // trouver moyen pour rendre ref unique
-        /* unique: true */
     },
     description_ct: {
         type: String, // Description de la CT
         required: true
     },
     cycle: {
-        type: String,
+        type: String, // Cycle
         required: true,
         enum: enums.CYCLES
+    },
+    domaine: {
+        type: String,
+        required: true
+    },
+    sous_domaine: {
+        type: String
     }
 });
 

@@ -7,6 +7,7 @@ import { AppRoutingModule } from './routing/app-routing.module';
 import { AuthModule } from './authentication/auth.module';
 import { MaterialModule } from './shared/material.module';
 import { GestionModule } from './gestion/gestion.module';
+import { ResultatsModule } from './resultats/resultats.module';
 // Components
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './routing/navbar/navbar.component';
@@ -20,6 +21,7 @@ import { ClassesService } from './shared/services/classes.service';
 import { ElevesService } from './shared/services/eleves.service';
 import { CompetencesService } from './shared/services/competences.service';
 import { ResultatsElevesService } from './shared/services/resultats-eleves.service';
+import { DomainesService } from './shared/services/domaines.service';
 // Guards
 import { AuthGuard } from './routing/guards/auth.guard';
 import { NotAuthGuard } from './routing/guards/not-auth.guard';
@@ -36,6 +38,7 @@ import { NotAuthGuard } from './routing/guards/not-auth.guard';
     AppRoutingModule,
     AuthModule,
     GestionModule,
+    ResultatsModule,
     FlashMessagesModule,
     FormsModule,
     ReactiveFormsModule
@@ -50,7 +53,8 @@ import { NotAuthGuard } from './routing/guards/not-auth.guard';
     ClassesService,
     ElevesService,
     CompetencesService,
-    ResultatsElevesService
+    ResultatsElevesService,
+    DomainesService
   ],
   bootstrap: [ AppComponent ]
 })

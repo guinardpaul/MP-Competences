@@ -10,7 +10,7 @@ import { Classe } from '../../shared/models/classe';
 @Component({
   selector: 'app-gestion-eleves',
   templateUrl: './gestion-eleves.component.html',
-  styleUrls: [ './gestion-eleves.component.css' ]
+  styleUrls: [ './gestion-eleves.component.css' ],
 })
 export class GestionElevesComponent implements OnInit {
   listEleves: Observable<Eleve[]>;
@@ -127,7 +127,7 @@ export class GestionElevesComponent implements OnInit {
       const eleve = new Eleve({
         nom: this.nom,
         prenom: this.prenom,
-        classe: this.objClasse._id
+        classe: this.selectedClasse._id
       });
 
       this._elevesService.saveEleve(eleve);
@@ -135,7 +135,7 @@ export class GestionElevesComponent implements OnInit {
       const eleve = new Eleve({
         nom: this.nom,
         prenom: this.prenom,
-        classe: this.objClasse._id
+        classe: this.selectedClasse._id
       });
 
       this._elevesService.updateEleve(eleve);

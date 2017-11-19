@@ -4,8 +4,10 @@ import { Observable } from 'rxjs/Observable';
 // Models
 import { CYCLES } from '../../shared/models/common/enums';
 import { Competence } from '../../shared/models/competence';
+import { Domaine } from '../../shared/models/domaine';
 // Services
 import { CompetencesService } from '../../shared/services/competences.service';
+import { DomainesService } from '../../shared/services/domaines.service';
 
 @Component({
   selector: 'app-gestion-competences',
@@ -16,6 +18,8 @@ export class GestionCompetencesComponent implements OnInit {
   selectedCycle: string;
   listCycles = CYCLES;
   listCompetences: Observable<Competence[]>;
+  listDomaines: Observable<Domaine[]>;
+  listCTsWithDomaine = new Array();
   competence: Competence;
   addMode: boolean;
   updateMode: boolean;
@@ -28,6 +32,7 @@ export class GestionCompetencesComponent implements OnInit {
 
   constructor(
     private _competencesService: CompetencesService,
+    private _domainesService: DomainesService,
     private _fb: FormBuilder
   ) {
     this.selectedCycle = '';
@@ -54,13 +59,38 @@ export class GestionCompetencesComponent implements OnInit {
   loadCycle(cycle) {
     this.selectedCycle = cycle;
     this.addCompetenceForm.get('cycle').setValue(cycle);
-    this.getCompetencesByCycle(cycle);
+    this.getDomainesByCycle(cycle);
+  }
+
+  getDomainesByCycle(cycle: string) {
+    if (cycle !== undefined) {
+      this._domainesService.getDomainesByCycle(cycle);
+      this.listDomaines = this._domainesService.listDomaines;
+    }
   }
 
   getCompetencesByCycle(cycle: string) {
     this._competencesService.getCompetenceByCycle(cycle);
     this.listCompetences = this._competencesService.listCompetences;
   }
+
+  /*  buildListCts(listeCts: Observable<Competence[]>) {
+     const listDomainesCts = [];
+     let lastDomaine = '';
+     // let lastSousDomaine = '';
+ 
+     listeCts.subscribe(data => {
+       data.forEach((ct, i) => {
+         if (lastDomaine === ct.domaine) {
+           listDomainesCts.push(ct);
+         } else {
+           lastDomaine = ct.domaine;
+           listDomainesCts.push(ct.domaine);
+         }
+       });
+     });
+     return listDomainesCts;
+   } */
 
   onAdd() {
     this.createForm();

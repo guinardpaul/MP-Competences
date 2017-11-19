@@ -57,6 +57,64 @@ module.exports = (router) => {
   });
 
   /**
+   * Get All competences par Domaine
+   */
+  router.get('/competences/domaine/:domaine', (req, res, next) => {
+    if (!req.params.domaine) {
+      res.status(400).json({
+        success: false,
+        message: 'domaine not provided'
+      });
+    } else {
+      Competence.find({ domaine: req.params.domaine }, (err, ct) => {
+        if (err) return next(err);
+
+        if (!ct) {
+          res.status(404).json({
+            success: false,
+            message: 'Competences not find'
+          });
+        }
+
+        return res.status(200).json(ct);
+      });
+    }
+  });
+
+  /**
+   * Get All competences par Domaine et cycle
+   */
+  router.get('/competences/cycle/:cycle/domaine/:domaine', (req, res, next) => {
+    if (!req.params.domaine) {
+      res.status(400).json({
+        success: false,
+        message: 'domaine not provided'
+      });
+    } else if (!req.params.cycle) {
+      res.status(400).json({
+        success: false,
+        message: 'cycle not provided'
+      });
+    } else {
+      Competence.find({ domaine: req.params.domaine, cycle: req.params.cycle }, (err, ct) => {
+        if (err) return next(err);
+
+        if (!ct) {
+          res.status(404).json({
+            success: false,
+            message: 'Competences not find'
+          });
+        }
+
+        return res.status(200).json({
+          success: true,
+          obj: ct
+        });
+      });
+    }
+  });
+
+  /**
    * Check unicité ref CT
    */
   router.get('/competences/cycle/:cycle/ref/:ref_ct', (req, res, next) => {
@@ -107,6 +165,11 @@ module.exports = (router) => {
       res.status(400).json({
         success: false,
         message: 'cycle not provided'
+      });
+    } else if (!req.body.domaine) {
+      res.status(400).json({
+        success: false,
+        message: 'domaine not provided'
       });
     } else {
       Competence.create(req.body, (err, ct) => {

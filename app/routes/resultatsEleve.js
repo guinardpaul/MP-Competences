@@ -73,7 +73,49 @@ module.exports = (router) => {
         message: 'competence id not provided'
       });
     } else {
-      Resultat.find({ eleve: req.params.eleve }, (err, resultat) => {
+      Resultat.find({ eleve: req.params.eleve, competence: req.params.competence }, (err, resultat) => {
+        if (err) return next(err);
+
+        if (!resultat) {
+          return res.status(404).json({
+            success: false,
+            message: 'Object resultat not find'
+          });
+        }
+
+        return res.status(200).json({
+          success: true,
+          obj: resultat
+        });
+      });
+    }
+  });
+
+  /**
+   * get all resultats by eleve id & competence id & trimestre
+   */
+  router.get('/resultats/eleve/:eleve/competence/:competence/trimestre/:trimestre', (req, res, next) => {
+    if (!req.params.eleve) {
+      return res.status(400).json({
+        success: false,
+        message: 'eleve id not provided'
+      });
+    } else if (req.params.competence) {
+      return res.status(400).json({
+        success: false,
+        message: 'competence id not provided'
+      });
+    } else if (req.params.trimestre) {
+      return res.status(400).json({
+        success: false,
+        message: 'trimestre id not provided'
+      });
+    } else {
+      Resultat.find({
+        eleve: req.params.eleve,
+        competence: req.params.competence,
+        trimestre: req.params.trimestre
+      }, (err, resultat) => {
         if (err) return next(err);
 
         if (!resultat) {
@@ -111,6 +153,11 @@ module.exports = (router) => {
       return res.status(400).json({
         success: false,
         message: 'value id not provided'
+      });
+    } else if (!req.body.trimestre) {
+      return res.status(400).json({
+        success: false,
+        message: 'trimestre not provided'
       });
     } else {
       Resultat.create(req.body, (err, resultat) => {
