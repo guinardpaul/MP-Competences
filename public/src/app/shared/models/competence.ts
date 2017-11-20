@@ -1,5 +1,5 @@
 import { CYCLES } from './common/enums';
-import { Domaine } from './domaines';
+import { Domaine } from './domaine';
 
 /**
  * Classe Competence

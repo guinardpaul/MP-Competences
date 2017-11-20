@@ -68,6 +68,39 @@ module.exports = (router) => {
   });
 
   /**
+   * Check ref unicité
+   */
+  router.get('/domaines/cycle/:cycle/ref/:ref_domaine', (req, res, next) => {
+    if (!req.params.cycle) {
+      res.status(400).json({
+        success: false,
+        message: 'cycle not provided'
+      });
+    } else if (!req.params.ref_domaine) {
+      res.status(400).json({
+        success: false,
+        message: 'ref domaine not provided'
+      });
+    } else {
+      Domaine.findOne({ cycle: req.params.cycle, ref_domaine: req.params.ref_domaine }, (err, domaine) => {
+        if (err) return next(err);
+
+        if (!domaine) {
+          return res.status(200).json({
+            success: true,
+            message: 'ref disponible'
+          });
+        }
+
+        return res.status(200).json({
+          success: false,
+          message: 'ref déja utilisée'
+        });
+      });
+    }
+  });
+
+  /**
    * Create Domaine
    */
   router.post('/domaines', (req, res, next) => {

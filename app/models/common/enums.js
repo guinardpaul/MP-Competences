@@ -4,8 +4,8 @@
  * Enum Cycles
  */
 module.export = CYCLES = [
-    'Cycle 3',
-    'Cycle 4'
+    "Cycle 3",
+    "Cycle 4"
 ];
 
 /**

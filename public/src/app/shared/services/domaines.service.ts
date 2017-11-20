@@ -48,6 +48,10 @@ export class DomainesService {
     return this._http.get<Domaine>(`${this.url}/domaines/${id_domaine}`);
   }
 
+  checkRefUnicite(cycle: string, ref_domaine: string) {
+    return this._http.get<any>(`${this.url}/domaines/cycle/${cycle}/ref/${ref_domaine}`);
+  }
+
   saveDomaine(domaine: Domaine) {
     return this._http.post<any>(`${this.url}/domaines`, domaine)
       .subscribe(data => {

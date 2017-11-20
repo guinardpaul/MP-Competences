@@ -3,7 +3,7 @@
   <h2 class="page-header">
     Gestion Compétences
     <!-- Button add -->
-    <button *ngIf="selectedCycle" class="btn btn-primary btn-circle btn-lg" (click)="onAdd()">
+    <button *ngIf="selectedCycle" class="btn btn-primary btn-circle btn-lg" (click)="onAddDomaine()">
       <span class="glyphicon glyphicon-plus"></span>
     </button>
   </h2>
@@ -20,7 +20,8 @@
     <!-- On selecte cycle => Tableaux domaines -->
     <!-- On selecte domaine => tableaux competences -->
 
-    <!-- Tableaux competences par cycle -->
+    <!-- Tableaux domaines par cycle -->
+    <h3>Domaines</h3>
     <table *ngIf="selectedCycle !== ''" class="table table-striped">
       <thead>
         <th class="ref-width">ref</th>
@@ -33,8 +34,10 @@
           <td>{{domaine.description_domaine}}</td>
           <td>
             <div class="btn-group-vertical">
-              <button class="btn btn-warning" (click)="onUpdate(domaine)">Modifier</button>
-              <button class="btn btn-danger" data-toggle="modal" data-target="#myModal" (click)="getCompetenceToDelete(domaine)">Supprimer</button>
+              <!-- update en mode double clic sur la ligne -->
+              <button class="btn btn-warning" (click)="onUpdateDomaine(domaine)">Modifier</button>
+              <!-- glyphycons cross pour delete -->
+              <button class="btn btn-danger" data-toggle="modal" data-target="#myModal" (click)="getDomaineToDelete(domaine)">Supprimer</button>
             </div>
           </td>
         </tr>
@@ -48,16 +51,17 @@
 
   <span class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 
-    <form *ngIf="addMode || updateMode" class="form-horizontal" [formGroup]="addCompetenceForm" (submit)="addOrUpdateCompetence()">
-      <div [ngClass]="addMode ? 'panel-info' : 'panel-warning'">
+    <!-- Add update Competence form -->
+    <form *ngIf="addCTsMode || updateCTsMode" class="form-horizontal" [formGroup]="competenceForm" (submit)="addOrUpdateCompetence()">
+      <div [ngClass]="addCTsMode ? 'panel-info' : 'panel-warning'">
         <div class="panel-heading header">
-          <span *ngIf="addMode">Création Compétence</span>
-          <span *ngIf="updateMode">Modification Compétence</span>
+          <span *ngIf="addCTsMode">Création Compétence</span>
+          <span *ngIf="updateCTsMode">Modification Compétence</span>
         </div>
         <div class="panel-body">
           <div class="form-group">
             <label for="ref_ct">Référence :</label>
-            <input class="form-control" type="text" name="ref_ct" id="ref_ct" formControlName="ref_ct" (blur)="checkRefUnicite()">
+            <input class="form-control" type="text" name="ref_ct" id="ref_ct" formControlName="ref_ct" (blur)="checkRefCompetenceUnicite()">
             <ul class="list-group">
               <li *ngIf="validRefCTUnicite" class="list-group-item list-group-item-danger">
                 La référence est déjà utilisée pour une compétence de ce cycle.
@@ -75,19 +79,57 @@
         </div>
         <div class="panel-footer">
           <div class="form-group">
-            <button *ngIf="addMode" [disabled]="!addCompetenceForm.valid || validRefCTUnicite" type="submit" class="btn btn-success">Sauver</button>
-            <button *ngIf="updateMode" [disabled]="!addCompetenceForm.valid || validRefCTUnicite" type="submit" class="btn btn-warning">Modifier</button>
+            <button *ngIf="addCTsMode" [disabled]="!competenceForm.valid || validRefCTUnicite" type="submit" class="btn btn-success">Sauver</button>
+            <button *ngIf="updateCTsMode" [disabled]="!competenceForm.valid || validRefCTUnicite" type="submit" class="btn btn-warning">Modifier</button>
             <button class="btn btn-default" (click)="closeForm()">Annuler</button>
           </div>
         </div>
 
       </div>
     </form>
+
+    <!-- Add update Domaine form -->
+    <form *ngIf="addDomaineMode || updateDomaineMode" class="form-horizontal" [formGroup]="domaineForm" (submit)="addOrUpdateDomaine()">
+      <div [ngClass]="addDomaineMode ? 'panel-info' : 'panel-warning'">
+        <div class="panel-heading header">
+          <span *ngIf="addDomaineMode">Création Domaine</span>
+          <span *ngIf="updateDomaineMode">Modification Domaine</span>
+        </div>
+        <div class="panel-body">
+          <div class="form-group">
+            <label for="ref_domaine">Référence :</label>
+            <input class="form-control" type="text" name="ref_domaine" id="ref_domaine" formControlName="ref_domaine">
+            <ul class="list-group">
+              <li *ngIf="validRefDomaineUnicite" class="list-group-item list-group-item-danger">
+                La référence est déjà utilisée pour un domaine de ce cycle.
+              </li>
+            </ul>
+          </div>
+          <div class="form-group">
+            <label for="description_domaine">Description :</label>
+            <textarea class="form-control" type="text" name="description_domaine" id="description_domaine" formControlName="description_domaine"></textarea>
+          </div>
+          <div class="form-group">
+            <label for="cycle">Cycle :</label>
+            <input type="text" id="cycle" name="cycle" formControlName="cycle" class="form-control">
+          </div>
+        </div>
+        <div class="panel-footer">
+          <div class="form-group">
+            <button *ngIf="addDomaineMode" [disabled]="!domaineForm.valid || validRefDomaineUnicite" type="submit" class="btn btn-success">Sauver</button>
+            <button *ngIf="updateDomaineMode" [disabled]="!domaineForm.valid || validRefDomaineUnicite" type="submit" class="btn btn-warning">Modifier</button>
+            <button class="btn btn-default" (click)="closeForm()">Annuler</button>
+          </div>
+        </div>
+
+      </div>
+    </form>
+
   </span>
 
 </div>
 
-<!-- Confirm delete Modal -->
+<!-- Confirm delete CTs Modal -->
 <div id="myModal" class="modal fade" role="dialog">
   <div class="modal-dialog">
     <!-- Modal content-->
@@ -102,6 +144,27 @@
       </div>
       <div class="modal-footer">
         <button class="btn btn-danger" (click)="onDelete(competence._id)" data-dismiss="modal">Supprimer</button>
+        <button class="btn btn-default" data-dismiss="modal" (click)="closeModal()">Annuler</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Confirm delete Domaines Modal -->
+<div id="domaineModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Confirmer suppression</h4>
+      </div>
+      <div class="modal-body">
+        <p>Etes-vous sûr de vouloir supprimer le domaine
+          <span class="header">{{domaine.ref_domaine}} {{domaine.description_domaine}}</span> ?</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-danger" (click)="onDeleteDomaine(domaine._id)" data-dismiss="modal">Supprimer</button>
         <button class="btn btn-default" data-dismiss="modal" (click)="closeModal()">Annuler</button>
       </div>
     </div>
