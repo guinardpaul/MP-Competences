@@ -13,6 +13,8 @@ export class DomainesService {
   listDomaines: Observable<Domaine[]>;
   private _listDomaines: BehaviorSubject<Domaine[]>;
   private dataStore: { listDomaines: Domaine[] };
+  processing: boolean;
+  success: boolean;
 
   constructor(
     private _http: HttpClient,
@@ -53,12 +55,16 @@ export class DomainesService {
   }
 
   saveDomaine(domaine: Domaine) {
+    this.processing = true;
     return this._http.post<any>(`${this.url}/domaines`, domaine)
       .subscribe(data => {
         this.dataStore.listDomaines.push(data.obj);
         this._listDomaines.next(Object.assign({}, this.dataStore).listDomaines);
         this._flashMsg.displayMsg('Domaine créé', 'alert-success', 3000);
+        this.success = true;
+        this.processing = false;
       }, err => {
+        this.processing = false;
         console.log(err);
         this._flashMsg.displayMsg('Erreur création domaine', 'alert-danger', 3000);
       });
@@ -94,6 +100,10 @@ export class DomainesService {
         console.log(err);
         this._flashMsg.displayMsg('Erreur suppression domaine', 'alert-danger', 3000);
       });
+  }
+
+  toggleProcessing() {
+    this.processing = !this.processing;
   }
 
 }

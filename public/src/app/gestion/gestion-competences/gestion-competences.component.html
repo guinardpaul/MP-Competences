@@ -21,30 +21,32 @@
     <!-- On selecte domaine => tableaux competences -->
 
     <!-- Tableaux domaines par cycle -->
-    <h3>Domaines</h3>
-    <table *ngIf="selectedCycle !== ''" class="table table-striped">
-      <thead>
-        <th class="ref-width">ref</th>
-        <th>description</th>
-        <th>Actions</th>
-      </thead>
-      <tbody>
-        <tr *ngFor="let domaine of listDomaines | async | sortByRefCt: 'ref_domaine'">
-          <td>{{domaine.ref_domaine}}</td>
-          <td>{{domaine.description_domaine}}</td>
-          <td>
-            <div class="btn-group-vertical">
-              <!-- update en mode double clic sur la ligne -->
-              <button class="btn btn-warning" (click)="onUpdateDomaine(domaine)">Modifier</button>
-              <!-- glyphycons cross pour delete -->
-              <button class="btn btn-danger" data-toggle="modal" data-target="#myModal" (click)="getDomaineToDelete(domaine)">Supprimer</button>
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <div *ngIf="selectedCycle !== ''">
+      <h4 style="text-align: center;">Domaines</h4>
+      <table class="table table-striped">
+        <thead>
+          <th class="ref-width">ref</th>
+          <th>description</th>
+          <th>Actions</th>
+        </thead>
+        <tbody>
+          <tr *ngFor="let domaine of listDomaines | async | sortByRefCt: 'ref_domaine'">
+            <td>{{domaine.ref_domaine}}</td>
+            <td>{{domaine.description_domaine}}</td>
+            <td>
+              <div class="btn-group-vertical">
+                <!-- update en mode double clic sur la ligne -->
+                <button class="btn btn-warning" (click)="onUpdateDomaine(domaine)">Modifier</button>
+                <!-- glyphycons cross pour delete -->
+                <button class="btn btn-danger" data-toggle="modal" data-target="#domaineModal" (click)="getDomaineToDelete(domaine)">Supprimer</button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
-    <p *ngIf="listDomaines === undefined">Sélectionnez un
+    <p *ngIf="selectedCycle === undefined || selectedCycle === ''">Sélectionnez un
       <b>cycle</b> pour commencer à gérer les compétences
     </p>
   </span>
@@ -140,7 +142,7 @@
       </div>
       <div class="modal-body">
         <p>Etes-vous sûr de vouloir supprimer la compétence
-          <span class="header">{{competence.ref_ct}} {{competence.description_ct}}</span> ?</p>
+          <span class="header">{{competence.ref_ct}}</span> ?</p>
       </div>
       <div class="modal-footer">
         <button class="btn btn-danger" (click)="onDelete(competence._id)" data-dismiss="modal">Supprimer</button>
@@ -161,7 +163,7 @@
       </div>
       <div class="modal-body">
         <p>Etes-vous sûr de vouloir supprimer le domaine
-          <span class="header">{{domaine.ref_domaine}} {{domaine.description_domaine}}</span> ?</p>
+          <span class="header">{{domaine.ref_domaine}}</span> ?</p>
       </div>
       <div class="modal-footer">
         <button class="btn btn-danger" (click)="onDeleteDomaine(domaine._id)" data-dismiss="modal">Supprimer</button>

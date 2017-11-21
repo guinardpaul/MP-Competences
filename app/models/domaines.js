@@ -18,7 +18,7 @@ const domainesSchema = new Schema({
   cycle: {
     type: String,
     required: true,
-    enum: CYCLES
+    enum: ['Cycle 3', 'Cycle 4']
   }
 });
 

@@ -92,11 +92,12 @@ export class GestionCompetencesComponent implements OnInit {
   loadCycle(cycle) {
     this.selectedCycle = cycle;
     this.competenceForm.get('cycle').setValue(cycle);
+    console.log(cycle);
     this.getDomainesByCycle(cycle);
   }
 
   getDomainesByCycle(cycle: string) {
-    if (cycle !== undefined) {
+    if (cycle !== undefined && cycle !== '') {
       this._domainesService.getDomainesByCycle(cycle);
       this.listDomaines = this._domainesService.listDomaines;
     }
@@ -146,6 +147,8 @@ export class GestionCompetencesComponent implements OnInit {
   onUpdateDomaine(domaine: Domaine) {
     this.addCTsMode = false;
     this.updateCTsMode = false;
+    this.addDomaineMode = false;
+    this.updateDomaineMode = true;
     this.domaine = domaine;
     this.domaineForm.get('ref_domaine').setValue(domaine.ref_domaine);
     this.domaineForm.get('description_domaine').setValue(domaine.description_domaine);
@@ -183,6 +186,7 @@ export class GestionCompetencesComponent implements OnInit {
       });
       console.log(domaine);
       this._domainesService.saveDomaine(domaine);
+      this.onSuccess();
     } else {
       const domaine = new Domaine({
         _id: this.domaine._id,
@@ -192,6 +196,7 @@ export class GestionCompetencesComponent implements OnInit {
       });
 
       this._domainesService.updateDomaine(domaine);
+      this.onSuccess();
     }
   }
 
