@@ -12,21 +12,30 @@
   border-radius: 25px;
 }
 
+.btn-circle.btn-sm {
+  border-radius: 25px;
+}
+
 .ref-width {
   width: 60px;
 }
 
 .description-width {
-  width: 260px;
+  width: 310px;
 }
 
 .action-width {
-  width: 160px;
+  width: 30px;
 }
 
 .selectDomaine {
-  background-color: rgb(173, 173, 245) !important;
+  background-color: rgb(147, 197, 255) !important;
 }
+
 .cursor {
   cursor: pointer;
+}
+
+.marge-top {
+  margin-top: 54px;
 }

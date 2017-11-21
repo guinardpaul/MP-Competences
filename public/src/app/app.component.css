@@ -1,10 +1,10 @@
 .flash-msg {
-  margin-top: -68px;
+  margin-top: -28px;
   position: fixed;
   width: 100%;
   z-index: 1;
 }
 
 .router-container {
-  margin-top: 120px;
+  margin-top: 80px;
 }
