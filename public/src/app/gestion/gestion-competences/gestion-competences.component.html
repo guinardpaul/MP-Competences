@@ -26,15 +26,15 @@
       <table class="table table-striped">
         <thead>
           <th class="ref-width">ref</th>
-          <th>description</th>
-          <th>Actions</th>
+          <th class="description-width">description</th>
+          <th class="action-width">Actions</th>
         </thead>
         <tbody>
-          <tr *ngFor="let domaine of listDomaines | async | sortByRefCt: 'ref_domaine'">
-            <td>{{domaine.ref_domaine}}</td>
-            <td>{{domaine.description_domaine}}</td>
+          <tr *ngFor="let domaine of listDomaines | async | sortByRefCt: 'ref_domaine'" [ngClass]="selectedDomaine === domaine ? 'selectDomaine' : null">
+            <td (click)="onSelectDomaine(domaine)" class="cursor">{{domaine.ref_domaine}}</td>
+            <td (click)="onSelectDomaine(domaine)" class="cursor">{{domaine.description_domaine}}</td>
             <td>
-              <div class="btn-group-vertical">
+              <div class="btn-group">
                 <!-- update en mode double clic sur la ligne -->
                 <button class="btn btn-warning" (click)="onUpdateDomaine(domaine)">Modifier</button>
                 <!-- glyphycons cross pour delete -->
@@ -52,6 +52,37 @@
   </span>
 
   <span class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+
+    <!-- Competences table -->
+    <div *ngIf="selectedDomaine !== undefined">
+      <h4 style="text-align: center;">Compétences
+        <button *ngIf="selectedDomaine !== undefined" class="btn btn-primary btn-circle btn-lg" (click)="onAddCompetence()">
+          <span class="glyphicon glyphicon-plus"></span>
+        </button>
+      </h4>
+
+      <table class="table table-striped">
+        <thead>
+          <th class="ref-width">ref</th>
+          <th class="description-width">description</th>
+          <th>Actions</th>
+        </thead>
+        <tbody>
+          <tr *ngFor="let ct of listCompetences | async | sortByRefCt: 'ref_ct'">
+            <td>{{ct.ref_ct}}</td>
+            <td>{{ct.description_ct}}</td>
+            <td>
+              <div class="btn-group">
+                <!-- update en mode double clic sur la ligne -->
+                <button class="btn btn-warning" (click)="onUpdateCompetence(ct)">Modifier</button>
+                <!-- glyphycons cross pour delete -->
+                <button class="btn btn-danger" data-toggle="modal" data-target="#domaineModal" (click)="getCompetenceToDelete(ct)">Supprimer</button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
     <!-- Add update Competence form -->
     <form *ngIf="addCTsMode || updateCTsMode" class="form-horizontal" [formGroup]="competenceForm" (submit)="addOrUpdateCompetence()">
@@ -75,8 +106,8 @@
             <textarea class="form-control" type="text" name="description_ct" id="description_ct" formControlName="description_ct"></textarea>
           </div>
           <div class="form-group">
-            <label for="cycle">Cycle :</label>
-            <input type="text" id="cycle" name="cycle" formControlName="cycle" class="form-control">
+            <label for="domaine">Domaine :</label>
+            <input type="text" id="domaine" name="domaine" formControlName="domaine" value="{{selectedDomaine.ref_domaine}}" class="form-control">
           </div>
         </div>
         <div class="panel-footer">

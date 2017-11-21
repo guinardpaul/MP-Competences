@@ -44,6 +44,16 @@ export class CompetencesService {
       });
   }
 
+  getCompetenceByDomaine(domaine_id: number) {
+    return this._http.get<Competence[]>(`${this.url}/competences/domaine/${domaine_id}`)
+      .subscribe(data => {
+        this.dataStore.listCompetences = data;
+        this._listCompetences.next(Object.assign({}, this.dataStore).listCompetences);
+      }, err => {
+        console.log(err);
+      });
+  }
+
   getCompetenceByRefCT(ref_ct: string): Observable<any> {
     return this._http.get<Competence>(`${this.url}/competences/ref/${ref_ct}`);
   }

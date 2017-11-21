@@ -12,7 +12,7 @@ export class Competence {
   ref_ct: string;
   description_ct: string;
   domaine: Domaine;
-  sous_domaine: string;
+  sous_domaine?: string;
   cycle: string;
 
   constructor(value: Object = {}) {

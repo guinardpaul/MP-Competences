@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 const Schema = mongoose.Schema;
 const enums = require('./common/enums');
+const Domaine = require('./domaines');
 
 /**
  * Competences par cycle défini dans DB (nombre défini et fixe a moins que l'user le modifie)
@@ -21,7 +22,8 @@ const competenceSchema = new Schema({
         enum: enums.CYCLES
     },
     domaine: {
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Domaine',
         required: true
     },
     sous_domaine: {
