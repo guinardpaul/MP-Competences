@@ -20,7 +20,8 @@
     <div *ngIf="selectedCycle !== ''">
       <h4 style="text-align: center;">Domaines
         <!-- Button add -->
-        <button *ngIf="selectedCycle" class="btn btn-primary btn-circle btn-sm" (click)="onAddDomaine()">
+        <button *ngIf="selectedCycle" class="btn btn-primary btn-circle btn-sm" data-toggle="modal" data-target="#addDomaineModal"
+          data-keyboard="true" (click)="onAddDomaine()">
           <span class="glyphicon glyphicon-plus"></span>
         </button>
       </h4>
@@ -37,9 +38,9 @@
             <td>
               <div class="btn-group">
                 <!-- update en mode double clic sur la ligne -->
-                <button class="btn btn-warning" (click)="onUpdateDomaine(domaine)">Modifier</button>
+                <button class="btn btn-warning" data-toggle="modal" data-target="#addDomaineModal" data-keyboard="true" (click)="onUpdateDomaine(domaine)">Modifier</button>
                 <!-- glyphycons cross pour delete -->
-                <button class="btn btn-danger" data-toggle="modal" data-target="#domaineModal" (click)="getDomaineToDelete(domaine)">Supprimer</button>
+                <button class="btn btn-danger" data-toggle="modal" data-target="#domaineModal" data-keyboard="true" (click)="getDomaineToDelete(domaine)">Supprimer</button>
               </div>
             </td>
           </tr>
@@ -122,17 +123,60 @@
       </div>
     </form>
 
-    <!-- Add update Domaine form -->
-    <form *ngIf="addDomaineMode || updateDomaineMode" class="form-horizontal" [formGroup]="domaineForm" (submit)="addOrUpdateDomaine()">
-      <div [ngClass]="addDomaineMode ? 'panel-info' : 'panel-warning'">
-        <div class="panel-heading header">
-          <span *ngIf="addDomaineMode">Création Domaine</span>
-          <span *ngIf="updateDomaineMode">Modification Domaine</span>
+    <!-- 
+<form *ngIf="addDomaineMode || updateDomaineMode" class="form-horizontal" [formGroup]="domaineForm" (submit)="addOrUpdateDomaine()">
+  <div [ngClass]="addDomaineMode ? 'panel-info' : 'panel-warning'">
+    <div class="panel-heading header">
+      <span *ngIf="addDomaineMode">Création Domaine</span>
+      <span *ngIf="updateDomaineMode">Modification Domaine</span>
+    </div>
+    <div class="panel-body">
+      <div class="form-group">
+        <label for="ref_domaine">Référence :</label>
+        <input class="form-control" type="text" name="ref_domaine" id="ref_domaine" formControlName="ref_domaine">
+        <ul class="list-group">
+          <li *ngIf="validRefDomaineUnicite" class="list-group-item list-group-item-danger">
+            La référence est déjà utilisée pour un domaine de ce cycle.
+          </li>
+        </ul>
+      </div>
+      <div class="form-group">
+        <label for="description_domaine">Description :</label>
+        <textarea class="form-control" type="text" name="description_domaine" id="description_domaine" formControlName="description_domaine"></textarea>
+      </div>
+      <div class="form-group">
+        <label for="cycle">Cycle :</label>
+        <input type="text" id="cycle" name="cycle" formControlName="cycle" class="form-control">
+      </div>
+    </div>
+    <div class="panel-footer">
+      <div class="form-group">
+        <button *ngIf="addDomaineMode" [disabled]="!domaineForm.valid || validRefDomaineUnicite" type="submit" class="btn btn-success">Sauver</button>
+        <button *ngIf="updateDomaineMode" [disabled]="!domaineForm.valid || validRefDomaineUnicite" type="submit" class="btn btn-warning">Modifier</button>
+        <button class="btn btn-default" (click)="closeForm()">Annuler</button>
+      </div>
+    </div>
+  </div>
+</form>
+ -->
+  </span>
+</div>
+
+<!-- Add update Domaine form modal -->
+<div id="addDomaineModal" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <form class="form-horizontal" [formGroup]="domaineForm">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title" *ngIf="addDomaineMode">Création Domaine</h4>
+          <h4 class="modal-title" *ngIf="updateDomaineMode">Modification Domaine</h4>
         </div>
-        <div class="panel-body">
+        <div class="modal-body">
           <div class="form-group">
             <label for="ref_domaine">Référence :</label>
-            <input class="form-control" type="text" name="ref_domaine" id="ref_domaine" formControlName="ref_domaine">
+            <input class="form-control" type="text" name="ref_domaine" id="ref_domaine" formControlName="ref_domaine" (blur)="checkRefDomaineUnicite()"
+              autofocus>
             <ul class="list-group">
               <li *ngIf="validRefDomaineUnicite" class="list-group-item list-group-item-danger">
                 La référence est déjà utilisée pour un domaine de ce cycle.
@@ -148,19 +192,16 @@
             <input type="text" id="cycle" name="cycle" formControlName="cycle" class="form-control">
           </div>
         </div>
-        <div class="panel-footer">
-          <div class="form-group">
-            <button *ngIf="addDomaineMode" [disabled]="!domaineForm.valid || validRefDomaineUnicite" type="submit" class="btn btn-success">Sauver</button>
-            <button *ngIf="updateDomaineMode" [disabled]="!domaineForm.valid || validRefDomaineUnicite" type="submit" class="btn btn-warning">Modifier</button>
-            <button class="btn btn-default" (click)="closeForm()">Annuler</button>
-          </div>
+        <div class="modal-footer">
+          <button *ngIf="addDomaineMode" [disabled]="!domaineForm.valid || validRefDomaineUnicite" type="submit" (click)="addOrUpdateDomaine()"
+            data-dismiss="modal" class="btn btn-success">Sauver</button>
+          <button *ngIf="updateDomaineMode" [disabled]="!domaineForm.valid || validRefDomaineUnicite" type="submit" (click)="addOrUpdateDomaine()"
+            data-dismiss="modal" class="btn btn-warning">Modifier</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal" (click)="closeForm()">Annuler</button>
         </div>
-
-      </div>
-    </form>
-
-  </span>
-
+      </form>
+    </div>
+  </div>
 </div>
 
 <!-- Confirm delete CTs Modal -->

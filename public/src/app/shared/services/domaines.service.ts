@@ -24,6 +24,7 @@ export class DomainesService {
     this.dataStore = { listDomaines: [] };
     this._listDomaines = <BehaviorSubject<Domaine[]>>new BehaviorSubject([]);
     this.listDomaines = this._listDomaines.asObservable();
+    this.processing = false;
   }
 
   getAllDomaines() {
@@ -99,7 +100,7 @@ export class DomainesService {
   }
 
   toggleProcessing() {
-    this.processing = !this.processing;
+    console.log(this.processing);
   }
 
 }

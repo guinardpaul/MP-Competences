@@ -202,7 +202,7 @@ export class GestionCompetencesComponent implements OnInit {
       });
       console.log(domaine);
       this._domainesService.saveDomaine(domaine);
-      this.onSuccess();
+      // this.onSuccess();
     } else {
       const domaine = new Domaine({
         _id: this.domaine._id,
@@ -212,7 +212,7 @@ export class GestionCompetencesComponent implements OnInit {
       });
 
       this._domainesService.updateDomaine(domaine);
-      this.onSuccess();
+      // this.onSuccess();
     }
   }
 
