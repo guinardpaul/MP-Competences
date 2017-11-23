@@ -40,7 +40,7 @@
                 <!-- update en mode double clic sur la ligne -->
                 <button class="btn btn-warning" data-toggle="modal" data-target="#addDomaineModal" data-keyboard="true" (click)="onUpdateDomaine(domaine)">Modifier</button>
                 <!-- glyphycons cross pour delete -->
-                <button class="btn btn-danger" data-toggle="modal" data-target="#domaineModal" data-keyboard="true" (click)="getDomaineToDelete(domaine)">Supprimer</button>
+                <button class="btn btn-danger" data-toggle="modal" data-target="#deleteDomaineModal" data-keyboard="true" (click)="getDomaineToDelete(domaine)">Supprimer</button>
               </div>
             </td>
           </tr>
@@ -78,7 +78,7 @@
                 <!-- update en mode double clic sur la ligne -->
                 <button class="btn btn-warning" (click)="onUpdateCompetence(ct)">Modifier</button>
                 <!-- glyphycons cross pour delete -->
-                <button class="btn btn-danger" data-toggle="modal" data-target="#domaineModal" (click)="getCompetenceToDelete(ct)">Supprimer</button>
+                <button class="btn btn-danger" data-toggle="modal" data-target="#deleteCtsModal" (click)="getCompetenceToDelete(ct)">Supprimer</button>
               </div>
             </td>
           </tr>
@@ -205,7 +205,7 @@
 </div>
 
 <!-- Confirm delete CTs Modal -->
-<div id="myModal" class="modal fade" role="dialog">
+<div id="deleteCtsModal" class="modal fade" role="dialog">
   <div class="modal-dialog">
     <!-- Modal content-->
     <div class="modal-content">
@@ -218,7 +218,7 @@
           <span class="header">{{competence.ref_ct}}</span> ?</p>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-danger" (click)="onDelete(competence._id)" data-dismiss="modal">Supprimer</button>
+        <button class="btn btn-danger" (click)="onDeleteCompetence(competence._id)" data-dismiss="modal">Supprimer</button>
         <button class="btn btn-default" data-dismiss="modal" (click)="closeModal()">Annuler</button>
       </div>
     </div>
@@ -226,7 +226,7 @@
 </div>
 
 <!-- Confirm delete Domaines Modal -->
-<div id="domaineModal" class="modal fade" role="dialog">
+<div id="deleteDomaineModal" class="modal fade" role="dialog">
   <div class="modal-dialog">
     <!-- Modal content-->
     <div class="modal-content">

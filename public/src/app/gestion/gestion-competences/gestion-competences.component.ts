@@ -100,7 +100,6 @@ export class GestionCompetencesComponent implements OnInit {
 
   onSelectDomaine(domaine: Domaine) {
     this.selectedDomaine = domaine;
-    console.log(this.selectedDomaine);
     this.getCompetencesByDomaine(domaine._id);
   }
 
@@ -111,34 +110,16 @@ export class GestionCompetencesComponent implements OnInit {
     }
   }
 
-  // TODO: get Cts by domaine
   getCompetencesByDomaine(domaine_id: number) {
     this._competencesService.getCompetenceByDomaine(domaine_id);
     this.listCompetences = this._competencesService.listCompetences;
   }
 
-  /*  buildListCts(listeCts: Observable<Competence[]>) {
-     const listDomainesCts = [];
-     let lastDomaine = '';
-     // let lastSousDomaine = '';
-
-     listeCts.subscribe(data => {
-       data.forEach((ct, i) => {
-         if (lastDomaine === ct.domaine) {
-           listDomainesCts.push(ct);
-         } else {
-           lastDomaine = ct.domaine;
-           listDomainesCts.push(ct.domaine);
-         }
-       });
-     });
-     return listDomainesCts;
-   } */
-
   onAddCompetence() {
     this.addCTsMode = true;
+    this.updateCTsMode = false;
     this.competence = new Competence();
-    this.competenceForm.get('domaine').setValue(this.selectedDomaine);
+    this.competenceForm.get('domaine').setValue(this.selectedDomaine.ref_domaine);
   }
 
   onAddDomaine() {
@@ -151,10 +132,12 @@ export class GestionCompetencesComponent implements OnInit {
   onUpdateCompetence(ct: Competence) {
     this.addCTsMode = false;
     this.updateCTsMode = true;
+    this.addDomaineMode = false;
+    this.updateDomaineMode = false;
     this.validRefCTUnicite = false;
     this.competenceForm.get('ref_ct').setValue(ct.ref_ct);
     this.competenceForm.get('description_ct').setValue(ct.description_ct);
-    this.competenceForm.get('domaine').setValue(this.selectedDomaine);
+    this.competenceForm.get('domaine').setValue(this.selectedDomaine.ref_domaine);
     this.competence = ct;
   }
 
