@@ -24,7 +24,7 @@ module.exports = (router) => {
         message: 'cycle not provided'
       });
     } else {
-      Domaine.find({ cycle: req.params.cycle }, (err, domaine) => {
+      Domaine.find({ cycle: req.params.cycle }).sort('ref_domaine').exec((err, domaine) => {
         if (err) return next(err);
 
         if (!domaine) {

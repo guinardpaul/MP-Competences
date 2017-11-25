@@ -70,7 +70,15 @@
           <th class="action-width">Actions</th>
         </thead>
         <tbody>
-          <tr *ngFor="let ct of listCompetences | async | sortByRefCt: 'ref_ct'">
+          <tr>
+            <td></td>
+            <td>
+              <button type="button" class="btn btn-primary btn-circle btn-sm" (click)="onAddSousDomaine()">
+                <span class="glyphicon glyphicon-plus"></span> Ajouter un sous-domaine
+              </button>
+            </td>
+          </tr>
+          <tr *ngFor="let ct of listCtsFiltered">
             <td>{{ct.ref_ct}}</td>
             <td>{{ct.description_ct}}</td>
             <td>
@@ -164,8 +172,8 @@
 
 <!-- Add update Domaine form modal -->
 <div id="addDomaineModal" class="modal fade" role="dialog">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
+  <div class="modal-dialog">
+    <div class="modal-content container">
       <form class="form-horizontal" [formGroup]="domaineForm">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal">&times;</button>

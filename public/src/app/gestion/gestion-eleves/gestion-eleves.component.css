@@ -11,3 +11,15 @@
   line-height: 1.33;
   border-radius: 25px;
 }
+
+.nom-width {
+  width: 400px;
+}
+
+.prenom-width {
+  width: 400px;
+}
+
+.action-width {
+  width: 800px;
+}

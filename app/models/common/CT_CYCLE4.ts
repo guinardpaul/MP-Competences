@@ -28,7 +28,7 @@ export const CT_CYCLE4 = [
       ]
     },
     'sous-domaine-2': {
-      'titre': 'Coopération et réalisation de projet. ',
+      'titre': 'Coopération et réalisation de projet.',
       'competences': [
         {
           'ref': 'CT 2.2',

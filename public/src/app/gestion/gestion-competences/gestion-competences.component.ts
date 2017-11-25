@@ -32,6 +32,8 @@ export class GestionCompetencesComponent implements OnInit {
   competenceForm: FormGroup;
   domaineForm: FormGroup;
 
+  listCtsFiltered = new Array();
+
   get ref_ct(): string { return this.competenceForm.get('ref_ct').value as string; }
   get description_ct(): string { return this.competenceForm.get('description_ct').value as string; }
   get domaine_ct(): string { return this.competenceForm.get('domaine').value as string; }
@@ -98,11 +100,6 @@ export class GestionCompetencesComponent implements OnInit {
     this.selectedDomaine = undefined;
   }
 
-  onSelectDomaine(domaine: Domaine) {
-    this.selectedDomaine = domaine;
-    this.getCompetencesByDomaine(domaine._id);
-  }
-
   getDomainesByCycle(cycle: string) {
     if (cycle !== undefined && cycle !== '') {
       this._domainesService.getDomainesByCycle(cycle);
@@ -110,9 +107,35 @@ export class GestionCompetencesComponent implements OnInit {
     }
   }
 
+  onSelectDomaine(domaine: Domaine) {
+    this.selectedDomaine = domaine;
+    this.listCtsFiltered = [];
+    this.listCompetences = <Observable<Competence[]>>new Observable();
+    this.getCompetencesByDomaine(domaine._id);
+  }
+
   getCompetencesByDomaine(domaine_id: number) {
     this._competencesService.getCompetenceByDomaine(domaine_id);
     this.listCompetences = this._competencesService.listCompetences;
+
+    let lastSousDomaine = '';
+    this.listCompetences.subscribe(data => {
+      data.forEach((d, i) => {
+        if (d.sous_domaine === lastSousDomaine) {
+          this.listCtsFiltered.push(d);
+        } else {
+          lastSousDomaine = d.sous_domaine;
+
+          const sousDomaine = new Competence({
+            ref_ct: '',
+            description_ct: d.sous_domaine
+          });
+          this.listCtsFiltered.push(sousDomaine);
+          this.listCtsFiltered.push(d);
+        }
+      });
+    });
+
   }
 
   onAddCompetence() {
@@ -127,6 +150,11 @@ export class GestionCompetencesComponent implements OnInit {
     this.addDomaineMode = true;
     this.updateDomaineMode = false;
     this.domaineForm.get('cycle').setValue(this.selectedCycle);
+  }
+
+  // TODO: 
+  onAddSousDomaine() {
+
   }
 
   onUpdateCompetence(ct: Competence) {

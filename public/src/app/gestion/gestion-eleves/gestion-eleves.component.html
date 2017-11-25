@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container-fluid">
 
   <h2 class="page-header">
     Gestion Elèves
@@ -17,9 +17,9 @@
 
     <table *ngIf="selectedClasse !== undefined || listEleves.length > 0" class="table table-striped">
       <thead>
-        <th>Nom</th>
-        <th>Prénom</th>
-        <th>Actions</th>
+        <th class="nom-width">Nom</th>
+        <th class="prenom-width">Prénom</th>
+        <th class="action-width">Actions</th>
       </thead>
       <tbody>
         <tr *ngFor="let eleve of listEleves | async | sortByString: 'nom'">

@@ -66,7 +66,7 @@ module.exports = (router) => {
         message: 'domaine not provided'
       });
     } else {
-      Competence.find({ domaine: req.params.domaine }, (err, ct) => {
+      Competence.find({ domaine: req.params.domaine }).sort({ 'sous_domaine': 1, 'ref_ct': 1 }).exec((err, ct) => {
         if (err) return next(err);
 
         if (!ct) {
